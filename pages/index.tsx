@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -14,11 +15,13 @@ export default function Home() {
         <div className="text-6xl text-red-50 pb-3">
           BUDŽETA PĀRVALDES<p>RĪKS</p>
         </div>
-        <Input className='mb-3' type="email" placeholder="Email" />
-        <Input className='mb-3' type="password" placeholder="Password" />
-        <Button className="bg-white text-black">Pieteikties</Button>
+        <Input className="mb-3" type="email" placeholder="Email" />
+        <Input className="mb-3" type="password" placeholder="Password" />
+        <Link href="/dashboard">
+          <Button className="bg-white text-black">Pieteikties</Button>
+        </Link>
       </div>
-      <div className="bg-slate-950 basis-1/2 h-screen"/>
+      <div className="bg-slate-950 basis-1/2 h-screen" />
     </div>
   );
 }
