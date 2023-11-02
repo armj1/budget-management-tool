@@ -2,14 +2,13 @@ import Head from 'next/head'
 
 export default function Home() {
   return (
-    <>
+    <div className="bg-gradient-to-b from-green-700 to-green-900	h-screen">
       <Head>
         <title>Front page</title>
         <link rel="icon" href="/tab_icon.ico" />
       </Head>
-      
-      <main className='bg-gray-950'>
-      </main>
-    </>
+      <div className='text-6xl text-red-50'>BUDŽETA PĀRVALDES<p>RĪKS</p></div>
+
+    </div>
   )
 }
