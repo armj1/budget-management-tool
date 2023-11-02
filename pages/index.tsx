@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { Button } from "@/components/ui/button"
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
         <link rel="icon" href="/tab_icon.ico" />
       </Head>
       <div className='text-6xl text-red-50'>BUDŽETA PĀRVALDES<p>RĪKS</p></div>
+      <Button>Click me</Button>
 
     </div>
   )
