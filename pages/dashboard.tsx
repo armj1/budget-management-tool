@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Example from "@/components/pie-chart";
 import StatisticsPieChart from "@/components/pie-chart";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
         <link rel="icon" href="/tab_icon.ico" />
       </Head>
       <div className="flex flex-row bg-indigo-200 p-2">
-        <img src="/profile-circle.svg" width="50px" />
+        <Image src="/profile-circle.svg" width={50} alt=""/>
         <p className="pl-2">
           Labdien, <b>lietotāj!</b>
         </p>
