@@ -36,10 +36,12 @@ export default function Home() {
           </Link>
         </div>
         <div className="bg-amber-200 basis-3/6 p-6">
-          <p>statistics</p>
-          <StatisticsPieChart />
+          <p className="text-xl"><b>Statistika</b></p>
+          <div className="flex justify-center"><StatisticsPieChart /></div>
         </div>
-        <div className="bg-red-200 basis-2/6 p-6">red flags</div>
+        <div className="bg-red-200 basis-2/6 p-6">
+          <p className="text-xl"><b>Brīdinājumi</b></p>
+        </div>
       </div>
     </>
   );
