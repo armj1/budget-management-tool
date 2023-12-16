@@ -1,20 +1,26 @@
-"use client"
+"use client";
 import Head from "next/head";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { useState } from "react";
 import RegistrationCard from "@/components/registration";
+import { signIn, signOut } from "next-auth/react";
 
 export default function Home() {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
-
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const OpenRegistration = () => {
     setIsRegistrationOpen(true);
   };
-
   const CloseRegistration = () => {
     setIsRegistrationOpen(false);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -24,23 +30,40 @@ export default function Home() {
           <title>Front page</title>
           <link rel="icon" href="/tab_icon.ico" />
         </Head>
-
         <div className="text-6xl text-red-50 pb-3">
           BUDŽETA PĀRVALDES<p>RĪKS</p>
         </div>
-        <Input className="mb-3" type="email" placeholder="E-pasts" />
-        <Input className="mb-3" type="password" placeholder="Parole" />
-        <Link href="/dashboard">
-          <Button className="bg-white text-black mr-3">Pieteikties</Button>
-        </Link>
+        <Input
+          className="mb-3"
+          type="email"
+          placeholder="E-pasts"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <Input
+          className="mb-3"
+          type="password"
+          placeholder="Parole"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        <Button className="bg-white text-black mr-3" onClick={() => signIn()}>
+          Pieteikties
+        </Button>
         <Button className="bg-white text-black" onClick={OpenRegistration}>
           Reģistrēties
         </Button>
         {isRegistrationOpen && (
-          <div className="flex fixed top-0 left-0 w-full h-full items-center justify-center backdrop-blur">
-            <RegistrationCard onClose={CloseRegistration} />
+          <div className="flex fixed top-0 left-0 w-full h-full items-center justify-center backdrop-blur-2xl">
+            <RegistrationCard
+              onClose={CloseRegistration}
+              setIsRegistrationOpen={setIsRegistrationOpen}
+            />
           </div>
         )}
+        <button onClick={() => signOut()}>Sign out</button>
       </div>
       <div className="bg-slate-950 basis-1/2 h-screen" />
     </div>
