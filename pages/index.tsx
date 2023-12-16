@@ -1,3 +1,4 @@
+"use client"
 import Head from "next/head";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,8 +28,8 @@ export default function Home() {
         <div className="text-6xl text-red-50 pb-3">
           BUDŽETA PĀRVALDES<p>RĪKS</p>
         </div>
-        <Input className="mb-3" type="email" placeholder="Email" />
-        <Input className="mb-3" type="password" placeholder="Password" />
+        <Input className="mb-3" type="email" placeholder="E-pasts" />
+        <Input className="mb-3" type="password" placeholder="Parole" />
         <Link href="/dashboard">
           <Button className="bg-white text-black mr-3">Pieteikties</Button>
         </Link>
