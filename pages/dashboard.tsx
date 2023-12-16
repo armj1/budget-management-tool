@@ -1,9 +1,7 @@
 import Head from "next/head";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Example from "@/components/pie-chart";
 import StatisticsPieChart from "@/components/pie-chart";
-import Image from "next/image";
 
 export default function Home() {
   return (

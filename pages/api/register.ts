@@ -12,10 +12,6 @@ export default async function handler(
     if (req.method === "POST") {
         const { firstName, lastName, email, password } = req.body;
     
-    if (password.length<8) {
-        return console.log({ error: 'Password must be at least 8 characters long.' });
-    }
-
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
