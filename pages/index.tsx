@@ -74,7 +74,6 @@ export default function Home() {
           <div className="flex fixed top-0 left-0 w-full h-full items-center justify-center backdrop-blur-2xl">
             <RegistrationCard
               onClose={CloseRegistration}
-              setIsRegistrationOpen={setIsRegistrationOpen}
             />
           </div>
         )}

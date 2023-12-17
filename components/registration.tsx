@@ -5,7 +5,6 @@ import { useState } from "react";
 
 interface RegistrationProps {
   onClose: () => void;
-  setIsRegistrationOpen: (isOpen: boolean) => void;
 }
 
 const RegistrationCard = (props: RegistrationProps) => {
@@ -29,13 +28,13 @@ const RegistrationCard = (props: RegistrationProps) => {
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log("User created:", data.user);
-        props.setIsRegistrationOpen(false);
+        props.onClose;
       } else {
-        console.error("Error creating user:", response.statusText);
+        //alert("Reģistrācija neizdevās!");
       }
     } catch (error) {
       console.error("Error creating user:", error);
@@ -44,51 +43,59 @@ const RegistrationCard = (props: RegistrationProps) => {
 
   return (
     <Card className="flex flex-col shadow-lg rounded p-4 text-base">
-      <p className="mb-3"><b>Ievadiet pieprasītos datus</b></p>
-      <Input
-        className="mb-3"
-        type="text"
-        placeholder="Vārds"
-        name="firstName"
-        value={formData.firstName}
-        onChange={handleChange}
-      />
-      <Input
-        className="mb-3"
-        type="text"
-        placeholder="Uzvārds"
-        name="lastName"
-        value={formData.lastName}
-        onChange={handleChange}
-      />
-      <Input
-        className="mb-3"
-        type="email"
-        placeholder="E-pasts"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      <Input
-        className="mb-3"
-        type="password"
-        placeholder="Parole"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      <Button
-        className="bg-white text-black text-base mb-3 bg-green-300"
-        onClick={onRegistration}
-      >
-        Reģistrēties
-      </Button>
-      <Button
-        className="flex items-center bg-red-300 text-black text-base"
-        onClick={props.onClose}
-      >
-        Atcelt
-      </Button>
+      <form>
+        <p className="mb-3">
+          <b>Ievadiet pieprasītos datus</b>
+        </p>
+        <Input
+          className="mb-3"
+          type="text"
+          placeholder="Vārds"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+        />
+        <Input
+          className="mb-3"
+          type="text"
+          placeholder="Uzvārds"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          required
+        />
+        <Input
+          className="mb-3"
+          type="email"
+          placeholder="E-pasts"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <Input
+          className="mb-3"
+          type="password"
+          placeholder="Parole"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <Button
+          className="bg-white text-black text-base mb-3 bg-green-300 w-full"
+          onClick={onRegistration}
+        >
+          Reģistrēties
+        </Button>
+        <Button
+          className="flex items-center bg-red-300 text-black text-base w-full"
+          onClick={props.onClose}
+        >
+          Atcelt
+        </Button>
+      </form>
     </Card>
   );
 };
