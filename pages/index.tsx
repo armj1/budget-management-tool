@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import RegistrationCard from "@/components/registration";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 export default function Home() {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
@@ -21,6 +21,15 @@ export default function Home() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async () => {
+    const result = await signIn("credentials", {
+      email: formData.email,
+      password: formData.password,
+      redirect: true,
+      callbackUrl: "/dashboard",
+    });
   };
 
   return (
@@ -49,7 +58,7 @@ export default function Home() {
           value={formData.password}
           onChange={handleChange}
         />
-        <Button className="bg-white text-black mr-3" onClick={() => signIn()}>
+        <Button className="bg-white text-black mr-3" onClick={onSubmit}>
           Pieteikties
         </Button>
         <Button className="bg-white text-black" onClick={OpenRegistration}>
@@ -63,7 +72,6 @@ export default function Home() {
             />
           </div>
         )}
-        <button onClick={() => signOut()}>Sign out</button>
       </div>
       <div className="bg-slate-950 basis-1/2 h-screen" />
     </div>

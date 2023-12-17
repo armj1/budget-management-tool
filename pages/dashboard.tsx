@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import StatisticsPieChart from "@/components/pie-chart";
+import { signOut } from "next-auth/react";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         <p className="pl-2">
           Labdien, <b>lietotāj!</b>
         </p>
+        <button onClick={() => signOut({ callbackUrl: '/' })}>Sign out</button>
       </div>
       <div className="flex flex-row">
         <div className="flex flex-col p-6 justify-evenly basis-1/6 bg-lime-200">
