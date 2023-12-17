@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { compare } from "bcrypt";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -74,11 +74,10 @@ export const authOptions: NextAuthOptions = {
     jwt: ({ token, user }) => {
       console.log("JWT Callback", { token, user });
       if (user) {
-        const u = user as unknown as any;
+        const u = user as unknown as User;
         return {
           ...token,
           id: u.id,
-          randomKey: u.randomKey,
         };
       }
       return token;
