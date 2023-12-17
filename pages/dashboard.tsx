@@ -13,7 +13,7 @@ export default function Home() {
       </Head>
       <div className="flex flex-row bg-indigo-200 p-2">
         <p className="pl-2">
-          Labdien, <b>lietotāj!</b>
+          Labdien, <b>lietotajs</b>
         </p>
         <button onClick={() => signOut({ callbackUrl: '/' })}>Sign out</button>
       </div>

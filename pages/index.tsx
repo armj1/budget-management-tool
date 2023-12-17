@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import RegistrationCard from "@/components/registration";
 import { signIn } from "next-auth/react";
+import router from "next/router";
 
 export default function Home() {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
@@ -27,9 +28,14 @@ export default function Home() {
     const result = await signIn("credentials", {
       email: formData.email,
       password: formData.password,
-      redirect: true,
-      callbackUrl: "/dashboard",
+      redirect: false,
+      callbackUrl: "/",
     });
+    if (result?.ok) {
+      router.push("/dashboard");
+    } else {
+      alert("Lietotājs neeksistē! Pārbaudiet vai ievadītie dati ir pareizi!");
+    }
   };
 
   return (
