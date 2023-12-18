@@ -34,7 +34,7 @@ export default function Home() {
     if (result?.ok) {
       router.push("/dashboard");
     } else {
-      alert("Lietotājs neeksistē! Pārbaudiet vai ievadītie dati ir pareizi!");
+      alert("Pieteikšanās neizdevās! Pārbaudiet vai ievadītie dati ir pareizi!");
     }
   };
 
