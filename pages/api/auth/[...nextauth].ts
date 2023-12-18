@@ -60,25 +60,15 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    session: ({ session, token }) => {
-      console.log("Session Callback", { session, token });
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          randomKey: token.randomKey,
-        },
-      };
+    session: async ({ session, token }) => {
+      if (session?.user) {
+        session.user.id = token.sub;
+      }
+      return session;
     },
-    jwt: ({ token, user }) => {
-      console.log("JWT Callback", { token, user });
+    jwt: async ({ user, token }) => {
       if (user) {
-        const u = user as unknown as User;
-        return {
-          ...token,
-          id: u.id,
-        };
+        token.uid = user.id;
       }
       return token;
     },
