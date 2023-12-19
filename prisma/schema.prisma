@@ -7,40 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model time {
-  id             String            @id @unique @default(uuid())
-  userId         String            @unique
-  user           user              @relation(fields: [userId], references: [id], onDelete: Cascade, map: "time_ibfk_1")
-  finacialRecord financialRecord[]
-}
-
 model user {
-  id        String  @id @unique @default(uuid())
-  firstName String
-  lastName  String
-  email     String  @unique
-  password  String
-  newUser   Boolean @default(true)
-  time      time[]
+  id              String            @id @unique @default(uuid())
+  firstName       String
+  lastName        String
+  email           String            @unique
+  password        String
+  newUser         Boolean           @default(true)
+  financialRecord financialRecord[]
 }
 
 model financialRecord {
-  id                 String  @id @unique @default(uuid())
+  id                 String   @id @unique @default(uuid())
   userId             String
-  user               time    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  totalIncome        Decimal @db.Decimal(15, 2)
-  taxedIncome        Decimal @db.Decimal(15, 2)
-  housingSpending    Decimal @db.Decimal(15, 2)
-  transportSpending  Decimal @db.Decimal(15, 2)
-  childSpending      Decimal @db.Decimal(15, 2)
-  healthSpending     Decimal @db.Decimal(15, 2)
-  insuranceSpending  Decimal @db.Decimal(15, 2)
-  shoppingSpending   Decimal @db.Decimal(15, 2)
-  leisureSpending    Decimal @db.Decimal(15, 2)
-  educationSpending  Decimal @db.Decimal(15, 2)
-  recreationSpending Decimal @db.Decimal(15, 2)
-  investmentSpending Decimal @db.Decimal(15, 2)
-  petSpending        Decimal @db.Decimal(15, 2)
-  foodSpending       Decimal @db.Decimal(15, 2)
-  otherSpending      Decimal @db.Decimal(15, 2)
+  user               user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date               DateTime @default(now())
+  totalIncome        Decimal  @db.Decimal(15, 2)
+  taxedIncome        Decimal  @db.Decimal(15, 2)
+  housingSpending    Decimal  @db.Decimal(15, 2)
+  transportSpending  Decimal  @db.Decimal(15, 2)
+  childSpending      Decimal  @db.Decimal(15, 2)
+  healthSpending     Decimal  @db.Decimal(15, 2)
+  insuranceSpending  Decimal  @db.Decimal(15, 2)
+  shoppingSpending   Decimal  @db.Decimal(15, 2)
+  leisureSpending    Decimal  @db.Decimal(15, 2)
+  educationSpending  Decimal  @db.Decimal(15, 2)
+  recreationSpending Decimal  @db.Decimal(15, 2)
+  investmentSpending Decimal  @db.Decimal(15, 2)
+  petSpending        Decimal  @db.Decimal(15, 2)
+  foodSpending       Decimal  @db.Decimal(15, 2)
+  otherSpending      Decimal  @db.Decimal(15, 2)
 }
