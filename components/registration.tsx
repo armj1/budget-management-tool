@@ -33,9 +33,7 @@ const RegistrationCard = (props: RegistrationProps) => {
         const data = await response.json();
         console.log("User created:", data.user);
         props.onClose;
-      } else {
-        //alert("Reģistrācija neizdevās!");
-      }
+      } 
     } catch (error) {
       console.error("Error creating user:", error);
     }
