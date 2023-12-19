@@ -7,11 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String     @id @unique @default(uuid())
+model time {
+  id     String @id
+  userId String @unique
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade, map: "time_ibfk_1")
+  finacialRecord financialRecord[]
+}
+
+model user {
+  id        String  @id @unique @default(uuid())
   firstName String
   lastName  String
   email     String  @unique
   password  String
   newUser   Boolean @default(true)
+  time      time[]
+}
+
+model financialRecord {
+  id     String @id
+  userId String
+  user time @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  totalIncome Decimal
+  taxedIncome Decimal
+  housingSpending Decimal
+  transportSpending Decimal
+  childSpending Decimal
+  healthSpending Decimal
+  insuranceSpending Decimal
+  shoppingSpending Decimal
+  leisureSpending Decimal
+  educationSpending Decimal
+  recreationSpending Decimal
+  investmentSpending Decimal
+  petSpending Decimal
+  foodSpending Decimal
+  otherSpending Decimal
 }

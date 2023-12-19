@@ -11,7 +11,7 @@ const Dashboard = (data: any) => {
   if (data.newUser == 0) {
     return <DashboardView {...data} />;
   } else {
-    return <AddInitialData />;
+    return <AddInitialData {...data} />;
   }
 };
 
