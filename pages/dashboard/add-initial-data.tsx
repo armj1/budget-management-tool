@@ -3,9 +3,12 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { signOut } from "next-auth/react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const AddInitialData = (data: any) => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     totalIncome: "",
     taxedIncome: "",
@@ -25,11 +28,18 @@ const AddInitialData = (data: any) => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value =
+      e.target.type === "number" ? parseFloat(e.target.value) : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const onSubmit = async () => {
     try {
+      if (parseFloat(formData.taxedIncome) > parseFloat(formData.totalIncome)) {
+        alert("Neto ienākumi nedrīkst pārsniegt bruto ienākumus!");
+        return;
+      }
+
       const response = await fetch("/api/addFinances", {
         method: "POST",
         headers: {
@@ -41,6 +51,11 @@ const AddInitialData = (data: any) => {
       if (response.ok) {
         const data = await response.json();
         console.log("Financial record created:", data.financialRecord);
+        router.reload();
+      } else if (response.status === 400 || 500) {
+        alert(
+          "Pārbaudiet ievadītos datus! Lauki nedrīkst būt tukši un ienākumi nedrīkst būt 0"
+        );
       }
     } catch (error) {
       console.error("Error creating user:", error);
@@ -79,17 +94,19 @@ const AddInitialData = (data: any) => {
                 <p className="font-medium mb-2">Ienākumi</p>
                 <Input
                   className="mb-2"
-                  placeholder="Bruto alga"
+                  placeholder="Bruto ienākumi"
                   value={formData.totalIncome}
                   type="number"
+                  min="0"
                   name="totalIncome"
                   onChange={handleChange}
-                  />
+                />
                 <Input
                   className="mb-6"
-                  placeholder="Neto alga"
+                  placeholder="Neto ienākumi"
                   value={formData.taxedIncome}
                   type="number"
+                  min="0"
                   name="taxedIncome"
                   onChange={handleChange}
                 />
@@ -99,6 +116,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Mājoklis"
                   value={formData.housingSpending}
                   type="number"
+                  min="0"
                   name="housingSpending"
                   onChange={handleChange}
                 />
@@ -107,6 +125,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Transports"
                   value={formData.transportSpending}
                   type="number"
+                  min="0"
                   name="transportSpending"
                   onChange={handleChange}
                 />
@@ -115,6 +134,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Pārtika"
                   value={formData.foodSpending}
                   type="number"
+                  min="0"
                   name="foodSpending"
                   onChange={handleChange}
                 />
@@ -123,6 +143,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Veselība / skaistumkopšana"
                   value={formData.healthSpending}
                   type="number"
+                  min="0"
                   name="healthSpending"
                   onChange={handleChange}
                 />
@@ -131,6 +152,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Bērni"
                   value={formData.childSpending}
                   type="number"
+                  min="0"
                   name="childSpending"
                   onChange={handleChange}
                 />
@@ -141,6 +163,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Iepirkšanās / pakalpojumi"
                   value={formData.shoppingSpending}
                   type="number"
+                  min="0"
                   name="shoppingSpending"
                   onChange={handleChange}
                 />
@@ -149,6 +172,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Brīvais laiks / izklaide"
                   value={formData.leisureSpending}
                   type="number"
+                  min="0"
                   name="leisureSpending"
                   onChange={handleChange}
                 />
@@ -157,6 +181,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Izglītība"
                   value={formData.educationSpending}
                   type="number"
+                  min="0"
                   name="educationSpending"
                   onChange={handleChange}
                 />
@@ -165,6 +190,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Atpūta"
                   value={formData.recreationSpending}
                   type="number"
+                  min="0"
                   name="recreationSpending"
                   onChange={handleChange}
                 />
@@ -173,6 +199,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Apdrošināšana"
                   value={formData.insuranceSpending}
                   type="number"
+                  min="0"
                   name="insuranceSpending"
                   onChange={handleChange}
                 />
@@ -181,6 +208,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Ieguldījumi / uzkrājumi"
                   value={formData.investmentSpending}
                   type="number"
+                  min="0"
                   name="investmentSpending"
                   onChange={handleChange}
                 />
@@ -189,6 +217,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Mājdzīvnieki"
                   value={formData.petSpending}
                   type="number"
+                  min="0"
                   name="petSpending"
                   onChange={handleChange}
                 />
@@ -197,6 +226,7 @@ const AddInitialData = (data: any) => {
                   placeholder="Citi izdevumi"
                   value={formData.otherSpending}
                   type="number"
+                  min="0"
                   name="otherSpending"
                   onChange={handleChange}
                 />
