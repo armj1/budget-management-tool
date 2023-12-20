@@ -48,11 +48,7 @@ export default async function handler(
           petSpending,
           foodSpending,
           otherSpending,
-          user: {
-            create: {
-              userId: session?.user.id || "",
-            },
-          },
+          userId: session?.user.id || "",
         },
       });
 

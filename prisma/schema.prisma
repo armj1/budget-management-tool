@@ -19,7 +19,7 @@ model user {
 
 model financialRecord {
   id                 String   @id @unique @default(uuid())
-  userId             String
+  userId             String 
   user               user     @relation(fields: [userId], references: [id], onDelete: Cascade)
   date               DateTime @default(now())
   totalIncome        Decimal  @db.Decimal(15, 2)

@@ -119,7 +119,7 @@ const AddInitialData = (data: any) => {
                   onChange={handleChange}
                 />
                 <Input
-                  className="mb-2 mr-3"
+                  className="mb-2 mr-7"
                   placeholder="Veselība / skaistumkopšana"
                   value={formData.healthSpending}
                   type="number"
@@ -137,7 +137,7 @@ const AddInitialData = (data: any) => {
               </div>
               <div>
                 <Input
-                  className="mt-8 mb-2"
+                  className="mt-8 mb-2 mr-7"
                   placeholder="Iepirkšanās / pakalpojumi"
                   value={formData.shoppingSpending}
                   type="number"
