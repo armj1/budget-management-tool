@@ -1,14 +1,14 @@
 import Head from "next/head";
 
-const BudgetRecommendations = () => {
+const CompareData = () => {
   return (
     <div className="flex flex-row">
       <Head>
-        <title>Budget recommendations</title>
+        <title>Compare data</title>
         <link rel="icon" href="/tab_icon.ico" />
       </Head>
     </div>
   );
 }
 
-export default BudgetRecommendations
+export default CompareData

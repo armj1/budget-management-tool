@@ -4,38 +4,40 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import StatisticsPieChart from "@/components/pie-chart";
 
-const DashboardView = (data:any) => {
+const DashboardView = (data: any) => {
   return (
-    <>
+    <div className="bg-red-200 h-screen">
       <Head>
         <title>Dashboard</title>
         <link rel="icon" href="/tab_icon.ico" />
       </Head>
-      <div className="flex flex-row bg-indigo-200 p-2">
+      <div className="flex flex-row p-2 bg-green-200">
         <p className="pl-2">
           Labdien, <b>{data.firstName}</b>
         </p>
-        <button onClick={() => signOut({ callbackUrl: "/" })}>Sign out</button>
+        <Button
+          className="flex mt-7 ml-50"
+          onClick={() => signOut({ callbackUrl: "/" })}
+        >
+          Atteikties
+        </Button>
       </div>
-      <div className="flex flex-row">
-        <div className="flex flex-col p-6 justify-evenly basis-1/6 bg-lime-200">
+      <div className="flex flex-row bg-blue-200">
+        <div className="flex flex-col p-6 justify-evenly basis-1/6 ">
           <Link href="dashboard/budget-recommendations">
-            <Button className="bg-slate-950 text-white mb-5">
-              Budžeta rekomendācijas
-            </Button>
+            <Button className="">Budžeta rekomendācijas</Button>
           </Link>
           <Link href="dashboard/loan-calculator">
-            <Button className="bg-slate-950 text-white mb-5">
-              Kredīta kalkulators
-            </Button>
+            <Button className="">Kredīta kalkulators</Button>
           </Link>
           <Link href="dashboard/tax-calculator">
-            <Button className="bg-slate-950 text-white">
-              Nodokļu kalkulators
-            </Button>
+            <Button className="">Nodokļu kalkulators</Button>
+          </Link>
+          <Link href="dashboard/compare-data">
+            <Button className="">Salidzināt datus</Button>
           </Link>
         </div>
-        <div className="bg-amber-200 basis-3/6 p-6">
+        <div className=" basis-3/6 p-6">
           <p className="text-xl">
             <b>Statistika</b>
           </p>
@@ -43,13 +45,13 @@ const DashboardView = (data:any) => {
             <StatisticsPieChart />
           </div>
         </div>
-        <div className="bg-red-200 basis-2/6 p-6">
+        <div className=" basis-2/6 p-6">
           <p className="text-xl">
             <b>Brīdinājumi</b>
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

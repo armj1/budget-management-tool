@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import DashboardView from "@/views/dashboard-view";
+import DashboardView from "@/pages/views/dashboard-view";
 import AddInitialData from "./dashboard/add-initial-data";
 
 const prisma = new PrismaClient();

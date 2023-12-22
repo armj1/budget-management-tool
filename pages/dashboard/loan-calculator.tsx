@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-export default function Home() {
+const LoanCalculator = () => {
   return (
     <div className="flex flex-row">
       <Head>
@@ -10,3 +10,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default LoanCalculator;
