@@ -12,9 +12,7 @@ import { Label } from "@/components/ui/label";
 const prisma = new PrismaClient();
 
 const MyProfile = (data: any) => {
-  const handleSubmit = () => {
-
-  }
+  const handleSubmit = () => {};
 
   return (
     <NavbarLayout>
@@ -30,16 +28,17 @@ const MyProfile = (data: any) => {
       <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
         <div className="flex flex-col justify-between">
           <div>
-            <h1 className="text-2xl">Svecināti, {data.firstName}!</h1>
+            <p className="text-2xl">Svecināti, {data.firstName}!</p>
             <p>
               <br />
               Šeit Jūs varat rediģēt profila datus, kā arī izdzēst savu profilu.
-            </p>
-            <p>
+              <br />
               Profila izdzēšana ir <b>neatgriezeniska</b> darbība!
             </p>
           </div>
-          <Button className="mb-10" variant="destructive">Izdzēst profilu</Button>
+          <Button className="mb-10" variant="destructive">
+            Izdzēst profilu
+          </Button>
         </div>
         <Card className="flex flex-col justify-between p-10 w-2/6">
           <form onSubmit={handleSubmit}>
