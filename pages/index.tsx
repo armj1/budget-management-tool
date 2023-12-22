@@ -43,7 +43,7 @@ export default function Home() {
       <div className="bg-gradient-to-b from-green-700 to-green-900 pt-6 pl-6 pr-6 basis-1/2 h-screen">
         <Head>
           <title>Front page</title>
-          <link rel="icon" href="/tab_icon.ico" />
+          <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
         </Head>
         <div className="text-6xl text-red-50 pb-3">
           BUDŽETA PĀRVALDES<p>RĪKS</p>

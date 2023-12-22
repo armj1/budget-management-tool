@@ -1,12 +1,12 @@
 import NavbarLayout from "@/components/navbar-layout";
 import Head from "next/head";
 
-const TaxCalculator = () => {
+const EditBudgetReport = () => {
   return (
     <NavbarLayout>
       <div className="flex flex-row">
         <Head>
-          <title>Tax calculator</title>
+          <title>Edit budget report</title>
           <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
         </Head>
       </div>
@@ -14,4 +14,4 @@ const TaxCalculator = () => {
   );
 };
 
-export default TaxCalculator;
+export default EditBudgetReport;
