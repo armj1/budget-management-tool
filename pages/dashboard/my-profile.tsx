@@ -59,7 +59,7 @@ const MyProfile = (data: any) => {
               <Input type="password" placeholder="Parole" />
             </div>
           </form>
-          <Button type="submit">Rediģēt datus</Button>
+          <Button className="bg-black" type="submit">Rediģēt datus</Button>
         </Card>
       </div>
     </NavbarLayout>

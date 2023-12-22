@@ -220,7 +220,7 @@ const NewBudgetReport = () => {
             </div>
           </div>
 
-          <Button onClick={onSubmit}>Iesniegt</Button>
+          <Button className="bg-black" onClick={onSubmit}>Iesniegt</Button>
         </Card>
       </div>
     </NavbarLayout>

@@ -76,7 +76,7 @@ const NavbarLayout = ({ children }: { children: React.ReactNode }) => {
           </DropdownMenuContent>
         </DropdownMenu>
         <CircleDollarSign className="h-12 w-12" />
-        <Button className="ml-3 text-base" onClick={() => signOut({ callbackUrl: "/" })}>
+        <Button className="ml-3 text-base bg-black" onClick={() => signOut({ callbackUrl: "/" })}>
           Atteikties
         </Button>
       </div>
