@@ -4,11 +4,17 @@ import Head from "next/head";
 const TaxCalculator = () => {
   return (
     <NavbarLayout>
-      <div className="flex flex-row">
-        <Head>
-          <title>Tax calculator</title>
-          <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
-        </Head>
+      <Head>
+        <title>Tax calculator</title>
+        <link
+          rel="icon"
+          href="/circle-dollar-sign.svg"
+          sizes="any"
+          type="image/svg+xml"
+        ></link>
+      </Head>
+      <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
+        <p className="text-lg">Balstoties uz atskaites datiem ir iespējams veikt nodokļu aprēķinu</p>
       </div>
     </NavbarLayout>
   );
