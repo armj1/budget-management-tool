@@ -26,7 +26,7 @@ export default function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async () => {
+  const handleSubmit = async () => {
     const result = await signIn("credentials", {
       email: formData.email,
       password: formData.password,
@@ -72,7 +72,7 @@ export default function Home() {
           value={formData.password}
           onChange={handleChange}
         />
-        <Button className="bg-black w-1/2 mt-5" onClick={onSubmit}>
+        <Button className="bg-black w-1/2" onClick={handleSubmit}>
           Pieteikties
         </Button>
         <p className="mt-20">Vai Jūs vēlaties reģistrēties?</p>
