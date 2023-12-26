@@ -11,12 +11,21 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { Separator } from "@/components/ui/separator";
+import DeleteProfileForm from "@/components/delete-profile";
 
 const prisma = new PrismaClient();
 
 const MyProfile = (data: any) => {
   const router = useRouter();
 
+  const [toDelete, setToDelete] = useState(false);
+
+  const OpenDeleteForm = () => {
+    setToDelete(true);
+  };
+  const CloseDeleteForm = () => {
+    setToDelete(false);
+  };
   const [formData, setFormData] = useState({
     firstName: data.firstName || "",
     lastName: data.lastName || "",
@@ -42,7 +51,7 @@ const MyProfile = (data: any) => {
         router.reload();
       }
     } catch (error) {
-      console.error("Error creating user:", error);
+      console.error("Error updating user:", error);
     }
   };
 
@@ -58,8 +67,8 @@ const MyProfile = (data: any) => {
         ></link>
       </Head>
       <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
-        <div className="flex flex-col justify-between">
-          <div>
+        <div className="flex flex-col  w-2/6">
+          <div className="mb-3">
             <p className="text-2xl">Svecināti, {data.firstName}!</p>
             <p>
               <br />
@@ -68,9 +77,11 @@ const MyProfile = (data: any) => {
               Profila izdzēšana ir <b>neatgriezeniska</b> darbība!
             </p>
           </div>
-          <Button className="mb-10" variant="destructive">
+          <Button className="mb-10 w-80" variant="destructive" onClick={OpenDeleteForm}>
             Izdzēst profilu
           </Button>
+          {toDelete && (<DeleteProfileForm onClose = {CloseDeleteForm} password={data.password}/>)}
+          
         </div>
         <Card className="flex flex-col justify-between p-10 w-2/6">
           <div className="pb-2">
@@ -149,6 +160,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       firstName: userData?.firstName,
       lastName: userData?.lastName,
       email: userData?.email,
+      password: userData?.password
     },
   };
 }
