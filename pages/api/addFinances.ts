@@ -7,6 +7,7 @@ import { z } from "zod";
 const prisma = new PrismaClient();
 
 const financialRecordSchema = z.object({
+  title: z.string().min(1),
   totalIncome: z.number().positive(),
   taxedIncome: z.number().positive(),
   housingSpending: z.number().min(0),
@@ -32,6 +33,7 @@ export default async function handler(
 
   if (req.method === "POST") {
     const {
+      title,
       totalIncome,
       taxedIncome,
       housingSpending,
@@ -52,6 +54,7 @@ export default async function handler(
     try {
       const createFinancialRecord = await prisma.financialRecord.create({
         data: {
+          title,
           totalIncome,
           taxedIncome,
           housingSpending,

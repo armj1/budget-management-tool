@@ -22,6 +22,7 @@ model financialRecord {
   userId             String
   user               user     @relation(fields: [userId], references: [id], onDelete: Cascade)
   date               DateTime @default(now())
+  title              String
   totalIncome        Decimal  @db.Decimal(65, 2)
   taxedIncome        Decimal  @db.Decimal(65, 2)
   housingSpending    Decimal  @db.Decimal(65, 2)
@@ -37,5 +38,5 @@ model financialRecord {
   petSpending        Decimal  @db.Decimal(65, 2)
   foodSpending       Decimal  @db.Decimal(65, 2)
   otherSpending      Decimal  @db.Decimal(65, 2)
-  leftoverMoney      Decimal  @db.Decimal(65, 2) @default(0)
+  leftoverMoney      Decimal  @default(0) @db.Decimal(65, 2)
 }

@@ -10,6 +10,7 @@ const AddInitialData = (data: any) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
+    title: "",
     totalIncome: "",
     taxedIncome: "",
     housingSpending: "",
@@ -67,7 +68,12 @@ const AddInitialData = (data: any) => {
       <div className="bg-green-200 h-screen">
         <Head>
           <title>Add initial data</title>
-          <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
+          <link
+            rel="icon"
+            href="/circle-dollar-sign.svg"
+            sizes="any"
+            type="image/svg+xml"
+          ></link>
         </Head>
         <div className="flex flex-col items-center">
           <div className="flex flex-row justify-between w-full pr-5">
@@ -91,7 +97,16 @@ const AddInitialData = (data: any) => {
           <Card className="flex flex-col p-10">
             <div className="flex flex-row pb-5">
               <div className="pr-10">
-                <p className="font-medium mb-2">Ienākumi</p>
+                <p className="font-medium mb-2">Atskaites nosaukums</p>
+                <Input
+                  className="mb-2"
+                  placeholder="Atskaites nosaukums"
+                  value={formData.title}
+                  type="text"
+                  name="title"
+                  onChange={handleChange}
+                />
+                <p className="font-medium mb-2 mt-6">Ienākumi</p>
                 <Input
                   className="mb-2"
                   placeholder="Bruto ienākumi"
@@ -120,8 +135,10 @@ const AddInitialData = (data: any) => {
                   name="housingSpending"
                   onChange={handleChange}
                 />
+              </div>
+              <div className="pr-10">
                 <Input
-                  className="mb-2"
+                  className="mb-2 mt-8"
                   placeholder="Transports"
                   value={formData.transportSpending}
                   type="number"
@@ -156,10 +173,8 @@ const AddInitialData = (data: any) => {
                   name="childSpending"
                   onChange={handleChange}
                 />
-              </div>
-              <div>
                 <Input
-                  className="mt-8 mb-2 mr-7"
+                  className="mb-2 mr-7"
                   placeholder="Iepirkšanās / pakalpojumi"
                   value={formData.shoppingSpending}
                   type="number"
@@ -176,8 +191,10 @@ const AddInitialData = (data: any) => {
                   name="leisureSpending"
                   onChange={handleChange}
                 />
+              </div>
+              <div>
                 <Input
-                  className="mb-2"
+                  className="mb-2 mt-8"
                   placeholder="Izglītība"
                   value={formData.educationSpending}
                   type="number"
@@ -233,7 +250,9 @@ const AddInitialData = (data: any) => {
               </div>
             </div>
 
-            <Button onClick={onSubmit}>Iesniegt</Button>
+            <Button className="bg-black" onClick={onSubmit}>
+              Iesniegt
+            </Button>
           </Card>
         </div>
       </div>
