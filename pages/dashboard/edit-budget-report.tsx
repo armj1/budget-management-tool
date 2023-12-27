@@ -44,6 +44,7 @@ const EditBudgetReport = () => {
     []
   );
 
+  console.log(financialReports)
   useEffect(() => {
     const fetchFinancialReports = async () => {
       try {

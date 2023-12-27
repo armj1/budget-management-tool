@@ -23,20 +23,20 @@ model financialRecord {
   user               user     @relation(fields: [userId], references: [id], onDelete: Cascade)
   date               DateTime @default(now())
   title              String
-  totalIncome        Decimal  @db.Decimal(65, 2)
-  taxedIncome        Decimal  @db.Decimal(65, 2)
-  housingSpending    Decimal  @db.Decimal(65, 2)
-  transportSpending  Decimal  @db.Decimal(65, 2)
-  childSpending      Decimal  @db.Decimal(65, 2)
-  healthSpending     Decimal  @db.Decimal(65, 2)
-  insuranceSpending  Decimal  @db.Decimal(65, 2)
-  shoppingSpending   Decimal  @db.Decimal(65, 2)
-  leisureSpending    Decimal  @db.Decimal(65, 2)
-  educationSpending  Decimal  @db.Decimal(65, 2)
-  recreationSpending Decimal  @db.Decimal(65, 2)
-  investmentSpending Decimal  @db.Decimal(65, 2)
-  petSpending        Decimal  @db.Decimal(65, 2)
-  foodSpending       Decimal  @db.Decimal(65, 2)
-  otherSpending      Decimal  @db.Decimal(65, 2)
-  leftoverMoney      Decimal  @default(0) @db.Decimal(65, 2)
+  totalIncome        Float
+  taxedIncome        Float
+  housingSpending    Float
+  transportSpending  Float
+  childSpending      Float
+  healthSpending     Float
+  insuranceSpending  Float
+  shoppingSpending   Float
+  leisureSpending    Float
+  educationSpending  Float
+  recreationSpending Float
+  investmentSpending Float
+  petSpending        Float
+  foodSpending       Float
+  otherSpending      Float
+  leftoverMoney      Float  @default(0) 
 }
