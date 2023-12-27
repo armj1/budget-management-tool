@@ -31,7 +31,7 @@ export default async function handler(
 ) {
   const session = await getServerSession(req, res, authOptions);
 
-  if (req.method === "POST") {
+  if (req.method === "PUT") {
     const {
       title,
       totalIncome,
@@ -52,7 +52,8 @@ export default async function handler(
     } = financialRecordSchema.parse(req.body);
 
     try {
-      const createFinancialRecord = await prisma.financialRecord.create({
+      const updateFinancialRecord = await prisma.financialRecord.update({
+        where: { id: session?.user.id },
         data: {
           title,
           totalIncome,
@@ -70,20 +71,15 @@ export default async function handler(
           petSpending,
           foodSpending,
           otherSpending,
-          userId: session?.user.id || "",
         },
       });
 
-      res.status(200).json({ financialRecord: createFinancialRecord });
-      const updateUserStatus = await prisma.user.update({
-        where: { id: session?.user.id },
-        data: { newUser: false },
-      });
-      res.status(200).json({ userUpdate: updateUserStatus });
-
+      res.status(200).json({ financialRecord: updateFinancialRecord });
     } catch (error) {
-      console.error("Error creating financial record:", error);
+      console.error("Error updating financial record:", error);
       res.status(400).json({ error: "Invalid data format" });
+    } finally {
+      await prisma.$disconnect();
     }
   } else {
     res.status(405).json({ error: "Method Not Allowed" });

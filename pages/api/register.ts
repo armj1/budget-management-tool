@@ -47,6 +47,9 @@ export default async function handler(
     } catch (error) {
       console.error("Error creating user:", error);
       res.status(500).json({ error: "Internal Server Error" });
+    } finally {
+      await prisma.$disconnect();
+
     }
   } else {
     res.status(405).json({ error: "Method Not Allowed" });

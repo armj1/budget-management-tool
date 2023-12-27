@@ -39,7 +39,7 @@ const NewBudgetReport = () => {
         return;
       }
 
-      const response = await fetch("/api/addFinances", {
+      const response = await fetch("/api/addFinancialRecord", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
