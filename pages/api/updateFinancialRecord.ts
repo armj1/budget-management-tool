@@ -7,6 +7,7 @@ import { z } from "zod";
 const prisma = new PrismaClient();
 
 const financialRecordSchema = z.object({
+  id: z.string(),
   title: z.string().min(1),
   totalIncome: z.number().positive(),
   taxedIncome: z.number().positive(),
@@ -33,6 +34,7 @@ export default async function handler(
 
   if (req.method === "PUT") {
     const {
+      id,
       title,
       totalIncome,
       taxedIncome,
@@ -53,7 +55,7 @@ export default async function handler(
 
     try {
       const updateFinancialRecord = await prisma.financialRecord.update({
-        where: { id: session?.user.id },
+        where: { id: id },
         data: {
           title,
           totalIncome,

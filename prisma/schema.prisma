@@ -38,5 +38,4 @@ model financialRecord {
   petSpending        Float
   foodSpending       Float
   otherSpending      Float
-  leftoverMoney      Float  @default(0) 
 }

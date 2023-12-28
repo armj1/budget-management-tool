@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 
 const EditBudgetReport = () => {
   const [formData, setFormData] = useState({
+    id: "",
     title: "",
     totalIncome: "",
     taxedIncome: "",
@@ -44,7 +45,7 @@ const EditBudgetReport = () => {
     []
   );
 
-  console.log(financialReports)
+  console.log(financialReports);
   useEffect(() => {
     const fetchFinancialReports = async () => {
       try {
@@ -62,6 +63,7 @@ const EditBudgetReport = () => {
 
   const handleReportSelect = (report: FinancialRecord) => {
     setFormData({
+      id: report.id,
       title: report.title,
       totalIncome: String(report.totalIncome),
       taxedIncome: String(report.taxedIncome),
@@ -81,7 +83,31 @@ const EditBudgetReport = () => {
     });
   };
 
+  const convertFormData = (formData: any) => {
+    return {
+      id: formData.id,
+      title: formData.title,
+      totalIncome: parseFloat(formData.totalIncome),
+      taxedIncome: parseFloat(formData.taxedIncome),
+      housingSpending: parseFloat(formData.housingSpending),
+      transportSpending: parseFloat(formData.transportSpending),
+      childSpending: parseFloat(formData.childSpending),
+      healthSpending: parseFloat(formData.healthSpending),
+      insuranceSpending: parseFloat(formData.insuranceSpending),
+      shoppingSpending: parseFloat(formData.shoppingSpending),
+      leisureSpending: parseFloat(formData.leisureSpending),
+      educationSpending: parseFloat(formData.educationSpending),
+      recreationSpending: parseFloat(formData.recreationSpending),
+      investmentSpending: parseFloat(formData.investmentSpending),
+      petSpending: parseFloat(formData.petSpending),
+      foodSpending: parseFloat(formData.foodSpending),
+      otherSpending: parseFloat(formData.otherSpending),
+    };
+  };
+
   const handleUpdate = async () => {
+    const numericFormData = convertFormData(formData);
+
     try {
       if (parseFloat(formData.taxedIncome) > parseFloat(formData.totalIncome)) {
         alert("Neto ienākumi nedrīkst pārsniegt bruto ienākumus!");
@@ -93,7 +119,7 @@ const EditBudgetReport = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(numericFormData),
       });
 
       if (response.ok) {
@@ -101,6 +127,8 @@ const EditBudgetReport = () => {
         console.log("Financial record updated:", data.financialRecord);
         router.reload();
       } else if (response.status === 400 || 500) {
+        const errorData = await response.json();
+        console.error("Update failed. Server response:", errorData);
         alert(
           "Pārbaudiet ievadītos datus! Lauki nedrīkst būt tukši un ienākumi nedrīkst būt 0"
         );
