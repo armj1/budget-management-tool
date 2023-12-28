@@ -17,6 +17,7 @@ import {
   Home,
   Lightbulb,
   PlusCircle,
+  Trash2,
   UserCircle2,
 } from "lucide-react";
 
@@ -38,6 +39,12 @@ const NavbarLayout = ({ children }: { children: React.ReactNode }) => {
               <ClipboardEdit className="mr-2 h-5 w-5" />
               <Link href={"/dashboard/edit-budget-report"}>
                 Rediģēt budžeta atskaiti
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-base">
+              <Trash2 className="mr-2 h-5 w-5" />
+              <Link href={"/dashboard/delete-budget-report"}>
+                Izdzēst budžeta atskaiti
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="text-base">
