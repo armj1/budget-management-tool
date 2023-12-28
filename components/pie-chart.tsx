@@ -1,63 +1,57 @@
-import dynamic from "next/dynamic";
-import { Pie, Cell } from "recharts";
+import React from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-const PieChart = dynamic(
-  () => import("recharts").then((recharts) => recharts.PieChart),
-  { ssr: false }
-);
+interface SpendingPieChartProps {
+  spendingData: Record<string, number>;
+}
 
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-];
+const SpendingPieChart = (props: SpendingPieChartProps) => {
+  const data = Object.entries(props.spendingData).map(([category, value]) => ({
+    category,
+    value,
+  }));
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-}: any) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  const COLORS = [
+    "#FF6384", // Mājoklis
+    "#36A2EB", // Pārtika
+    "#607D8B", // Transports
+    "#4BC0C0", // Veselība
+    "#9966FF", // Bērni
+    "#FF9F40", // Iepirkšanās
+    "#1E88E5", // Izklaide
+    "#FF7043", // Izglītība
+    "#922B21", // Atpūta
+    "#5C6BC0", // Apdrošināšana
+    "#154360", // Ieguldījumi
+    "#81C784", // Mājdzīvnieki
+    "#B7950B", // Cits
+    "#7986CB", // Atlikums
+  ];
 
   return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
+    <ResponsiveContainer width="100%" height={500}>
+      <PieChart>
+        <Pie
+          data={data}
+          dataKey="value"
+          nameKey="category"
+          cx="50%"
+          cy="50%"
+          outerRadius={200}
+          fill="#8884d8"
+          label
+        >
+          {data.map((entry, index) => (
+            <Cell
+              className="outline-none"
+              key={`cell-${index}`}
+              fill={COLORS[index % COLORS.length]}
+            />
+          ))}
+        </Pie>
+      </PieChart>
+    </ResponsiveContainer>
   );
 };
-export default function StatisticsPieChart() {
-  return (
-    <PieChart width={400} height={400}>
-      <Pie
-        data={data}
-        cx={200}
-        cy={200}
-        labelLine={false}
-        label={renderCustomizedLabel}
-        outerRadius={180}
-        fill="#8884d8"
-        dataKey="value"
-      >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-    </PieChart>
-  );
-}
+
+export default SpendingPieChart;
