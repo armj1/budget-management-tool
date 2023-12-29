@@ -32,6 +32,7 @@ const SpendingPieChart = (props: SpendingPieChartProps) => {
     <ResponsiveContainer width="100%" height={500}>
       <PieChart>
         <Pie
+          className="outline-none"
           data={data}
           dataKey="value"
           nameKey="category"
