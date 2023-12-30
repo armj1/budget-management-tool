@@ -32,7 +32,7 @@ const DeleteProfileForm = (props: DeleteFormProps) => {
       });
       if (response.ok) {
         router.push("/");
-      } else if (response.status===500) {
+      } else if (response.status === 500) {
         alert("Ievadītā parole nav pareiza!");
       }
     } catch (error) {
@@ -42,32 +42,19 @@ const DeleteProfileForm = (props: DeleteFormProps) => {
 
   return (
     <Card className="flex flex-col p-3">
-      <Button
-        variant="outline"
-        size="icon"
-        className="flex items-center text-base h-6 w-6 mb-2"
-        onClick={props.onClose}
-      >
+      <Button variant="outline" size="icon" className="flex items-center text-base h-6 w-6 mb-2" onClick={props.onClose}>
         <X className="h-5 w-5" />
       </Button>
       <div className="flex flex-col pl-7 pr-7 pb-7">
-        <p className="font-medium mb-3">
-          Lūdzu ievadiet paroli, lai apstiprinātu profila izdzēšanu
-        </p>
+        <p className="font-medium mb-3">Lūdzu ievadiet paroli, lai apstiprinātu profila izdzēšanu</p>
         <Input
           type="password"
           className="mb-3"
           placeholder="Parole"
           value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         />
-        <Button
-          className="flex justify-center"
-          variant="destructive"
-          onClick={handleDelete}
-        >
+        <Button className="flex justify-center" variant="destructive" onClick={handleDelete}>
           Apstiprināt izdzēšanu
         </Button>
       </div>

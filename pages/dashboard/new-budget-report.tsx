@@ -27,8 +27,7 @@ const NewBudgetReport = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value =
-      e.target.type === "number" ? parseFloat(e.target.value) : e.target.value;
+    const value = e.target.type === "number" ? parseFloat(e.target.value) : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
   };
 
@@ -52,9 +51,7 @@ const NewBudgetReport = () => {
         console.log("Financial record created:", data.financialRecord);
         router.reload();
       } else if (response.status === 400 || 500) {
-        alert(
-          "Pārbaudiet ievadītos datus! Lauki nedrīkst būt tukši un ienākumi nedrīkst būt 0"
-        );
+        alert("Pārbaudiet ievadītos datus! Lauki nedrīkst būt tukši un ienākumi nedrīkst būt 0");
       }
     } catch (error) {
       console.error("Error creating user:", error);
@@ -65,31 +62,16 @@ const NewBudgetReport = () => {
     <NavbarLayout>
       <Head>
         <title>Create new financial report</title>
-        <link
-          rel="icon"
-          href="/circle-dollar-sign.svg"
-          sizes="any"
-          type="image/svg+xml"
-        ></link>
+        <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
       <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-center">
         <div className="flex flex-col">
-          <p className="flex justify-center text-lg pb-3">
-            Lai izveidotu budžeta atskaiti, lūdzu, ievadiet vajadzīgo
-            informāciju
-          </p>
+          <p className="flex justify-center text-lg pb-3">Lai izveidotu budžeta atskaiti, lūdzu, ievadiet vajadzīgo informāciju</p>
           <Card className="flex flex-col p-10">
             <div className="flex flex-row pb-5">
               <div className="pr-10">
                 <p className="font-medium mb-2">Atskaites nosaukums</p>
-                <Input
-                  className="mb-2"
-                  placeholder="Atskaites nosaukums"
-                  value={formData.title}
-                  type="text"
-                  name="title"
-                  onChange={handleChange}
-                />
+                <Input className="mb-2" placeholder="Atskaites nosaukums" value={formData.title} type="text" name="title" onChange={handleChange} />
                 <p className="font-medium mb-2 mt-6">Ienākumi</p>
                 <Input
                   className="mb-2"
@@ -130,15 +112,7 @@ const NewBudgetReport = () => {
                   name="transportSpending"
                   onChange={handleChange}
                 />
-                <Input
-                  className="mb-2"
-                  placeholder="Pārtika"
-                  value={formData.foodSpending}
-                  type="number"
-                  min="0"
-                  name="foodSpending"
-                  onChange={handleChange}
-                />
+                <Input className="mb-2" placeholder="Pārtika" value={formData.foodSpending} type="number" min="0" name="foodSpending" onChange={handleChange} />
                 <Input
                   className="mb-2 mr-7"
                   placeholder="Veselība / skaistumkopšana"
@@ -148,15 +122,7 @@ const NewBudgetReport = () => {
                   name="healthSpending"
                   onChange={handleChange}
                 />
-                <Input
-                  className="mb-2"
-                  placeholder="Bērni"
-                  value={formData.childSpending}
-                  type="number"
-                  min="0"
-                  name="childSpending"
-                  onChange={handleChange}
-                />
+                <Input className="mb-2" placeholder="Bērni" value={formData.childSpending} type="number" min="0" name="childSpending" onChange={handleChange} />
                 <Input
                   className="mb-2 mr-7"
                   placeholder="Iepirkšanās / pakalpojumi"

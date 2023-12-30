@@ -6,10 +6,7 @@ import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
 
   if (req.method === "DELETE") {
@@ -42,7 +39,6 @@ export default async function handler(
       } else {
         res.status(500).json({ error: "Internal Server Error" });
       }
-
     } catch (error) {
       console.error("Error deleting user:", error);
       res.status(500).json({ error: "Internal Server Error" });

@@ -31,23 +31,9 @@ const SpendingPieChart = (props: SpendingPieChartProps) => {
   return (
     <ResponsiveContainer width="100%" height={500}>
       <PieChart>
-        <Pie
-          className="outline-none"
-          data={data}
-          dataKey="value"
-          nameKey="category"
-          cx="50%"
-          cy="50%"
-          outerRadius={200}
-          fill="#8884d8"
-          label
-        >
+        <Pie className="outline-none" data={data} dataKey="value" nameKey="category" cx="50%" cy="50%" outerRadius={200} fill="#8884d8" label>
           {data.map((entry, index) => (
-            <Cell
-              className="outline-none"
-              key={`cell-${index}`}
-              fill={COLORS[index % COLORS.length]}
-            />
+            <Cell className="outline-none" key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
       </PieChart>

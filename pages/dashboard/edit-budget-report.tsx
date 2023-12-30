@@ -1,11 +1,6 @@
 import NavbarLayout from "@/components/navbar-layout";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import FinancialRecord from "@/interfaces/FinancialRecord";
@@ -36,14 +31,11 @@ const EditBudgetReport = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value =
-      e.target.type === "number" ? parseFloat(e.target.value) : e.target.value;
+    const value = e.target.type === "number" ? parseFloat(e.target.value) : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
   };
 
-  const [financialReports, setFinancialReports] = useState<FinancialRecord[]>(
-    []
-  );
+  const [financialReports, setFinancialReports] = useState<FinancialRecord[]>([]);
 
   console.log(financialReports);
   useEffect(() => {
@@ -129,9 +121,7 @@ const EditBudgetReport = () => {
       } else if (response.status === 400 || 500) {
         const errorData = await response.json();
         console.error("Update failed. Server response:", errorData);
-        alert(
-          "Pārbaudiet ievadītos datus! Lauki nedrīkst būt tukši un ienākumi nedrīkst būt 0"
-        );
+        alert("Pārbaudiet ievadītos datus! Lauki nedrīkst būt tukši un ienākumi nedrīkst būt 0");
       }
     } catch (error) {
       console.error("Error updating user:", error);
@@ -142,18 +132,11 @@ const EditBudgetReport = () => {
     <NavbarLayout>
       <Head>
         <title>Edit budget report</title>
-        <link
-          rel="icon"
-          href="/circle-dollar-sign.svg"
-          sizes="any"
-          type="image/svg+xml"
-        ></link>
+        <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
       <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
         <div className="flex flex-col">
-          <p className="text-lg pb-2">
-            Pirms rediģēšanas, lūdzu, izvēlieties vajadzīgo atskaiti sarakstā
-          </p>
+          <p className="text-lg pb-2">Pirms rediģēšanas, lūdzu, izvēlieties vajadzīgo atskaiti sarakstā</p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Pieejamās budžeta atskaites</Button>
@@ -161,10 +144,7 @@ const EditBudgetReport = () => {
             <DropdownMenuContent className="w-80">
               {financialReports &&
                 financialReports.map((report) => (
-                  <DropdownMenuItem
-                    key={report.id}
-                    onClick={() => handleReportSelect(report)}
-                  >
+                  <DropdownMenuItem key={report.id} onClick={() => handleReportSelect(report)}>
                     {report.title}
                   </DropdownMenuItem>
                 ))}
@@ -176,14 +156,7 @@ const EditBudgetReport = () => {
             <div className="flex flex-row pb-5">
               <div className="pr-10">
                 <p className="font-medium mb-2">Atskaites nosaukums</p>
-                <Input
-                  className="mb-2"
-                  placeholder="Atskaites nosaukums"
-                  value={formData.title}
-                  type="text"
-                  name="title"
-                  onChange={handleChange}
-                />
+                <Input className="mb-2" placeholder="Atskaites nosaukums" value={formData.title} type="text" name="title" onChange={handleChange} />
                 <p className="font-medium mb-2 mt-6">Ienākumi</p>
                 <Label>Bruto ienākumi</Label>
                 <Input
@@ -229,15 +202,7 @@ const EditBudgetReport = () => {
                   onChange={handleChange}
                 />
                 <Label>Pārtika</Label>
-                <Input
-                  className="mb-2"
-                  placeholder="Pārtika"
-                  value={formData.foodSpending}
-                  type="number"
-                  min="0"
-                  name="foodSpending"
-                  onChange={handleChange}
-                />
+                <Input className="mb-2" placeholder="Pārtika" value={formData.foodSpending} type="number" min="0" name="foodSpending" onChange={handleChange} />
                 <Label>Veselība / skaistumkopšana</Label>
                 <Input
                   className="mb-2 mr-7"
@@ -249,15 +214,7 @@ const EditBudgetReport = () => {
                   onChange={handleChange}
                 />
                 <Label>Bērni</Label>
-                <Input
-                  className="mb-2"
-                  placeholder="Bērni"
-                  value={formData.childSpending}
-                  type="number"
-                  min="0"
-                  name="childSpending"
-                  onChange={handleChange}
-                />
+                <Input className="mb-2" placeholder="Bērni" value={formData.childSpending} type="number" min="0" name="childSpending" onChange={handleChange} />
                 <Label>Iepirkšanās / pakalpojumi</Label>
                 <Input
                   className="mb-2 mr-7"

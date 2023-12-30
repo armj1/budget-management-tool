@@ -36,9 +36,7 @@ export default function Home() {
     if (result?.ok) {
       router.push("/dashboard");
     } else {
-      alert(
-        "Pieteikšanās neizdevās! Pārbaudiet vai ievadītie dati ir pareizi!"
-      );
+      alert("Pieteikšanās neizdevās! Pārbaudiet vai ievadītie dati ir pareizi!");
     }
   };
 
@@ -46,32 +44,13 @@ export default function Home() {
     <div className="flex flex-row justify-center bg-gradient-to-b from-green-700 to-green-900 p-6 h-screen w-full">
       <Head>
         <title>Front page</title>
-        <link
-          rel="icon"
-          href="/circle-dollar-sign.svg"
-          sizes="any"
-          type="image/svg+xml"
-        ></link>
+        <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
       <Card className="flex flex-col items-center mt-10 mb-20 p-6 w-1/3">
         <CircleDollarSign className="w-6 h-6 mb-2" />
         <p className="text-3xl mb-10">BUDŽETA PĀRVALDES RĪKS</p>
-        <Input
-          className="mb-3"
-          type="email"
-          placeholder="E-pasts"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        <Input
-          className="mb-3"
-          type="password"
-          placeholder="Parole"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
+        <Input className="mb-3" type="email" placeholder="E-pasts" name="email" value={formData.email} onChange={handleChange} />
+        <Input className="mb-3" type="password" placeholder="Parole" name="password" value={formData.password} onChange={handleChange} />
         <Button className="bg-black w-1/2" onClick={handleSubmit}>
           Pieteikties
         </Button>

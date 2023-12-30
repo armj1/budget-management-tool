@@ -59,12 +59,7 @@ const MyProfile = (data: any) => {
     <NavbarLayout>
       <Head>
         <title>Mans profils</title>
-        <link
-          rel="icon"
-          href="/circle-dollar-sign.svg"
-          sizes="any"
-          type="image/svg+xml"
-        ></link>
+        <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
       <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
         <div className="flex flex-col  w-2/6">
@@ -80,54 +75,26 @@ const MyProfile = (data: any) => {
           <Button className="mb-10 w-80" variant="destructive" onClick={OpenDeleteForm}>
             Izdzēst profilu
           </Button>
-          {toDelete && (<DeleteProfileForm onClose = {CloseDeleteForm} password={data.password}/>)}
-          
+          {toDelete && <DeleteProfileForm onClose={CloseDeleteForm} password={data.password} />}
         </div>
         <Card className="flex flex-col justify-between p-10 w-2/6">
           <div className="pb-2">
             <Label>Vārds</Label>
-            <Input
-              placeholder={data.firstName}
-              value={formData.firstName}
-              onChange={(e) =>
-                setFormData({ ...formData, firstName: e.target.value })
-              }
-            />
+            <Input placeholder={data.firstName} value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} />
           </div>
           <div className="pb-2">
             <Label>Uzvārds</Label>
-            <Input
-              placeholder={data.lastName}
-              value={formData.lastName}
-              onChange={(e) =>
-                setFormData({ ...formData, lastName: e.target.value })
-              }
-            />
+            <Input placeholder={data.lastName} value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} />
           </div>
           <div className="pb-2">
             <Label>E-pasts</Label>
-            <Input
-              placeholder={data.email}
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-            />
+            <Input placeholder={data.email} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
           </div>
           <Separator />
-          <p className="flex font-medium justify-end">
-            Ievadiet esošu vai jaunu paroli
-          </p>
+          <p className="flex font-medium justify-end">Ievadiet esošu vai jaunu paroli</p>
           <div className="">
             <Label>Parole</Label>
-            <Input
-              type="password"
-              placeholder="Parole"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-            />
+            <Input type="password" placeholder="Parole" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
           </div>
           <div>
             <Label>Atkārtot paroli</Label>
@@ -135,9 +102,7 @@ const MyProfile = (data: any) => {
               type="password"
               placeholder="Atkārtot paroli"
               value={formData.confirmPassword}
-              onChange={(e) =>
-                setFormData({ ...formData, confirmPassword: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
             />
           </div>
           <Button className="bg-black mt-6" onClick={updateSubmit}>
@@ -160,7 +125,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       firstName: userData?.firstName,
       lastName: userData?.lastName,
       email: userData?.email,
-      password: userData?.password
+      password: userData?.password,
     },
   };
 }

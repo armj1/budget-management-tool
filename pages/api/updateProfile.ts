@@ -25,16 +25,11 @@ const userUpdateSchema = z
     }
   );
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
 
   if (req.method === "PUT") {
-    const { firstName, lastName, email, password } = userUpdateSchema.parse(
-      req.body
-    );
+    const { firstName, lastName, email, password } = userUpdateSchema.parse(req.body);
 
     try {
       const hashedPassword = await bcrypt.hash(password, 10);

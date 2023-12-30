@@ -1,11 +1,6 @@
 import Head from "next/head";
 import NavbarLayout from "@/components/navbar-layout";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -15,9 +10,7 @@ import SpendingPieChart from "@/components/pie-chart";
 import { Circle } from "lucide-react";
 
 const DashboardView = (data: any) => {
-  const [financialReports, setFinancialReports] = useState<FinancialRecord[]>(
-    []
-  );
+  const [financialReports, setFinancialReports] = useState<FinancialRecord[]>([]);
 
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
 
@@ -57,11 +50,7 @@ const DashboardView = (data: any) => {
     (selectedReport?.shoppingSpending ?? 0) +
     (selectedReport?.transportSpending ?? 0);
 
-    const leftoverMoney = Math.max(
-      parseFloat(((selectedReport?.taxedIncome ?? 0) - totalSpending).toFixed(2)),
-      0
-    );
-    
+  const leftoverMoney = Math.max(parseFloat(((selectedReport?.taxedIncome ?? 0) - totalSpending).toFixed(2)), 0);
 
   const spendingData = {
     Mājoklis: selectedReport?.housingSpending ?? 0,
@@ -84,12 +73,7 @@ const DashboardView = (data: any) => {
     <NavbarLayout>
       <Head>
         <title>Dashboard</title>
-        <link
-          rel="icon"
-          href="/circle-dollar-sign.svg"
-          sizes="any"
-          type="image/svg+xml"
-        ></link>
+        <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
       <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
         <div className="w-1/2">
@@ -109,10 +93,7 @@ const DashboardView = (data: any) => {
               <DropdownMenuContent className="w-80">
                 {financialReports &&
                   financialReports.map((report) => (
-                    <DropdownMenuItem
-                      key={report.id}
-                      onClick={() => handleReportSelect(report)}
-                    >
+                    <DropdownMenuItem key={report.id} onClick={() => handleReportSelect(report)}>
                       {report.title}
                     </DropdownMenuItem>
                   ))}
@@ -121,12 +102,8 @@ const DashboardView = (data: any) => {
           </div>
           <Card className="flex flex-col mt-3 p-4">
             <div className="flex flex-row pb-2 justify-between">
-              <Card className="p-2">
-                Bruto ienākumi: €{selectedReport?.totalIncome}
-              </Card>
-              <Card className="p-2">
-                Neto ienākumi: €{selectedReport?.taxedIncome}
-              </Card>
+              <Card className="p-2">Bruto ienākumi: €{selectedReport?.totalIncome}</Card>
+              <Card className="p-2">Neto ienākumi: €{selectedReport?.taxedIncome}</Card>
               <Card className="flex flex-row p-2">
                 <Circle className="bg-[#7986CB] rounded-full mr-2" />
                 Atlikums: €{leftoverMoney}
@@ -189,9 +166,7 @@ const DashboardView = (data: any) => {
                   <Circle className="bg-[#B7950B] rounded-full mr-2" />
                   Citi izdevumi: €{selectedReport?.otherSpending}
                 </Card>
-                <Card className="p-2 mb-2">
-                  Kopējie izdevumi: €{totalSpending}
-                </Card>
+                <Card className="p-2 mb-2">Kopējie izdevumi: €{totalSpending}</Card>
               </div>
             </div>
           </Card>

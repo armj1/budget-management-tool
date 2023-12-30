@@ -23,13 +23,9 @@ const userRegistrationSchema = z
     }
   );
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    const { firstName, lastName, email, password } =
-      userRegistrationSchema.parse(req.body);
+    const { firstName, lastName, email, password } = userRegistrationSchema.parse(req.body);
 
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -49,7 +45,6 @@ export default async function handler(
       res.status(500).json({ error: "Internal Server Error" });
     } finally {
       await prisma.$disconnect();
-
     }
   } else {
     res.status(405).json({ error: "Method Not Allowed" });

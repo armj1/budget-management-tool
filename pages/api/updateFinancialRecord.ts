@@ -26,10 +26,7 @@ const financialRecordSchema = z.object({
   otherSpending: z.number().min(0),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
 
   if (req.method === "PUT") {

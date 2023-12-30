@@ -44,12 +44,7 @@ const RegistrationCard = (props: RegistrationProps) => {
   return (
     <Card className="flex flex-col shadow-lg rounded p-4 text-base w-1/3 h-4/5 mb-20 mt-10">
       <div className="flex flex-row justify-between">
-        <Button
-          variant="outline"
-          size="icon"
-          className="flex items-center text-base"
-          onClick={props.onClose}
-        >
+        <Button variant="outline" size="icon" className="flex items-center text-base" onClick={props.onClose}>
           <X />
         </Button>
         <CircleDollarSign className=" w-6 h-6 mb-2 mt-1" />
@@ -58,42 +53,10 @@ const RegistrationCard = (props: RegistrationProps) => {
       <div className="flex flex-col items-center">
         <p className="text-lg">REĢISTRĀCIJA</p>
         <p className="flex pb-5 font-bold">Ievadiet pieprasītos datus</p>
-        <Input
-          className="mb-3 w-3/4"
-          type="text"
-          placeholder="Vārds"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          className="mb-3 w-3/4"
-          type="text"
-          placeholder="Uzvārds"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          className="mb-3 w-3/4"
-          type="email"
-          placeholder="E-pasts"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          className="mb-3 w-3/4"
-          type="password"
-          placeholder="Parole"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <Input className="mb-3 w-3/4" type="text" placeholder="Vārds" name="firstName" value={formData.firstName} onChange={handleChange} required />
+        <Input className="mb-3 w-3/4" type="text" placeholder="Uzvārds" name="lastName" value={formData.lastName} onChange={handleChange} required />
+        <Input className="mb-3 w-3/4" type="email" placeholder="E-pasts" name="email" value={formData.email} onChange={handleChange} required />
+        <Input className="mb-3 w-3/4" type="password" placeholder="Parole" name="password" value={formData.password} onChange={handleChange} required />
         <Input
           className="mb-3 w-3/4"
           type="password"
@@ -103,10 +66,7 @@ const RegistrationCard = (props: RegistrationProps) => {
           onChange={handleChange}
           required
         />
-        <Button
-          className="text-base mb-6 bg-black w-1/2"
-          onClick={onRegistration}
-        >
+        <Button className="text-base mb-6 bg-black w-1/2" onClick={onRegistration}>
           Reģistrēties
         </Button>
       </div>

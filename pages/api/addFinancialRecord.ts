@@ -25,10 +25,7 @@ const financialRecordSchema = z.object({
   otherSpending: z.number().min(0),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
 
   if (req.method === "POST") {
@@ -80,7 +77,6 @@ export default async function handler(
         data: { newUser: false },
       });
       res.status(200).json({ userUpdate: updateUserStatus });
-
     } catch (error) {
       console.error("Error creating financial record:", error);
       res.status(400).json({ error: "Invalid data format" });
