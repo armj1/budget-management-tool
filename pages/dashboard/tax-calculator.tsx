@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FinancialRecord from "@/interfaces/FinancialRecord";
 import Head from "next/head";
+import router from "next/router";
 import { useEffect, useState } from "react";
 
 const TaxCalculator = () => {
@@ -117,6 +118,32 @@ const TaxCalculator = () => {
     }
   }, [selectedReport, areNetIncomesDifferent]);
 
+
+  const handleUpdate = async () => {
+    try {
+      const response = await fetch("/api/updateNetIncome", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: selectedReport?.id,
+          taxedIncome: result.netIncome,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        router.reload();
+      } else if (response.status === 400 || 500) {
+        const errorData = await response.json();
+        console.error("Update failed. Server response:", errorData);
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+  
   return (
     <NavbarLayout>
       <Head>
@@ -179,7 +206,7 @@ const TaxCalculator = () => {
                 <p className="font-medium mb-1">Aprēķinātie neto ienākumi nesakrīt ar atskaites neto ienākumiem</p>
                 <p>Atskaitē: €{selectedReport?.taxedIncome}</p>
                 <p>Aprēķinātie: €{result.netIncome}</p>
-                <Button className="bg-black mt-2" >Atjaunot datus</Button>
+                <Button className="bg-black mt-2" onClick={handleUpdate} >Atjaunot datus</Button>
               </Card>
             )}
           </div>

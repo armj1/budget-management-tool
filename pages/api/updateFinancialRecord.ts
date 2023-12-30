@@ -1,7 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./auth/[...nextauth]";
 import { z } from "zod";
 
 const prisma = new PrismaClient();
@@ -27,8 +25,6 @@ const financialRecordSchema = z.object({
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions);
-
   if (req.method === "PUT") {
     const {
       id,
