@@ -64,7 +64,7 @@ const AddInitialData = (data: any) => {
     <>
       <div className="bg-green-200 h-screen">
         <Head>
-          <title>Add initial data</title>
+          <title>Pirmās atskaites izveidošana</title>
           <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
         </Head>
         <div className="flex flex-col items-center">

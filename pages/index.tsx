@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <div className="flex flex-row justify-center bg-gradient-to-b from-green-700 to-green-900 p-6 h-screen w-full">
       <Head>
-        <title>Front page</title>
+        <title>Pieteikšanās lapa</title>
         <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
       <Card className="flex flex-col items-center mt-10 mb-20 p-6 w-1/3">

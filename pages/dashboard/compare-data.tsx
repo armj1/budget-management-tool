@@ -59,7 +59,7 @@ const CompareData = () => {
   return (
     <NavbarLayout>
       <Head>
-        <title>Compare data</title>
+        <title>Atskaišu salīdzināšana</title>
         <link
           rel="icon"
           href="/circle-dollar-sign.svg"
