@@ -41,10 +41,6 @@ const NavbarLayout = ({ children }: { children: React.ReactNode }) => {
               <Link href={"/dashboard/budget-recommendations"}>Budžeta rekomendācijas</Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="text-base">
-              <CreditCard className="mr-2 h-5 w-5" />
-              <Link href={"/dashboard/loan-calculator"}>Kredīta kalkulators</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-base">
               <Calculator className="mr-2 h-5 w-5" />
               <Link href={"/dashboard/tax-calculator"}>Nodokļu kalkulators</Link>
             </DropdownMenuItem>
