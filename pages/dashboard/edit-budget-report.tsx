@@ -103,10 +103,6 @@ const EditBudgetReport = () => {
     const numericFormData = convertFormData(formData);
 
     try {
-      if (parseFloat(formData.taxedIncome) > parseFloat(formData.totalIncome)) {
-        alert("Neto ienākumi nedrīkst pārsniegt bruto ienākumus!");
-        return;
-      }
 
       const response = await fetch("/api/updateFinancialRecord", {
         method: "PUT",

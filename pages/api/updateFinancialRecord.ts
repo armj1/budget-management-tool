@@ -1,28 +1,112 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { z } from "zod";
+import { object, z } from "zod";
 
 const prisma = new PrismaClient();
 
-const financialRecordSchema = z.object({
-  id: z.string(),
-  title: z.string().min(1),
-  totalIncome: z.number().positive(),
-  taxedIncome: z.number().positive(),
-  housingSpending: z.number().min(0),
-  transportSpending: z.number().min(0),
-  childSpending: z.number().min(0),
-  healthSpending: z.number().min(0),
-  insuranceSpending: z.number().min(0),
-  shoppingSpending: z.number().min(0),
-  leisureSpending: z.number().min(0),
-  educationSpending: z.number().min(0),
-  recreationSpending: z.number().min(0),
-  investmentSpending: z.number().min(0),
-  petSpending: z.number().min(0),
-  foodSpending: z.number().min(0),
-  otherSpending: z.number().min(0),
-});
+const financialRecordSchema = z
+  .object({
+    id: z.string(),
+    title: z.string().min(1),
+    totalIncome: z
+      .number()
+      .positive()
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    taxedIncome: z
+      .number()
+      .positive()
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    housingSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    transportSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    childSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    healthSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    insuranceSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    shoppingSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    leisureSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    educationSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    recreationSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    investmentSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    petSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    foodSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+    otherSpending: z
+      .number()
+      .min(0)
+      .refine((value) => isTwoDecimalPlaces(value), {
+        message: "Should have at most two decimal places",
+      }),
+  })
+  .refine((obj) => obj.taxedIncome <= obj.totalIncome, {
+    message: "Taxed income must not be larger than total income",
+  });
+
+const isTwoDecimalPlaces = (value: number): boolean => {
+  const decimalPlaces = (value.toString().split(".")[1] || "").length;
+  return decimalPlaces <= 2;
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "PUT") {

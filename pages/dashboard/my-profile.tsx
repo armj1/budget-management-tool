@@ -19,6 +19,8 @@ const MyProfile = (data: any) => {
   const router = useRouter();
 
   const [toDelete, setToDelete] = useState(false);
+  const [showPasswordLengthError, setShowPasswordLengthError] = useState(false);
+  const [showPasswordMatchError, setShowPasswordMatchError] = useState(false);
 
   const OpenDeleteForm = () => {
     setToDelete(true);
@@ -43,12 +45,20 @@ const MyProfile = (data: any) => {
         },
         body: JSON.stringify(formData),
       });
-      if (formData.password.length < 8) {
-        alert("Parolei jāsatur vismaz 8 simbolus!");
-      } else if (formData.password !== formData.confirmPassword) {
-        alert("Ievadītās paroles nesakrīt!");
-      } else if (response.ok) {
+      if (response.ok) {
         router.reload();
+      }
+
+      if (formData.password.length < 8) {
+        setShowPasswordLengthError(true);
+      } else {
+        setShowPasswordLengthError(false);
+      }
+
+      if (formData.confirmPassword != formData.password) {
+        setShowPasswordMatchError(true);
+      } else {
+        setShowPasswordMatchError(false);
       }
     } catch (error) {
       console.error("Error updating user:", error);
@@ -95,6 +105,7 @@ const MyProfile = (data: any) => {
           <div className="">
             <Label>Parole</Label>
             <Input type="password" placeholder="Parole" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+            {showPasswordLengthError && <p className="flex text-red-600 justify-center text-sm">Parolei jābūt vismaz 8 simbolus garai</p>}
           </div>
           <div>
             <Label>Atkārtot paroli</Label>
@@ -104,6 +115,7 @@ const MyProfile = (data: any) => {
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
             />
+            {showPasswordMatchError && <p className="flex text-red-600 justify-center text-sm">Ievadītās paroles nesakrīt</p>}
           </div>
           <Button className="bg-black mt-6" onClick={updateSubmit}>
             Rediģēt datus
