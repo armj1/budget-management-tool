@@ -171,21 +171,21 @@ const BudgetRecommendations = () => {
               {recommendations.openHousingRecomm && (
                 <p className="flex flex-row text-lg">
                   <Dot />
-                  Jūsu izdevumi mājoklim pārsniedz ieteicamos 30% no neto ienākuma - vēlamie maksimālie mājokļa izdevumi ir €{recommendations.housing}, pašlaik
-                  tie ir €{selectedReport?.housingSpending}
+                  Jūsu izdevumi mājoklim pārsniedz ieteicamos 30% no neto ienākuma - vēlamie maksimālie mājokļa izdevumi ir €{(recommendations.housing).toFixed(2)}, pašlaik
+                  tie ir €{(selectedReport?.housingSpending).toFixed(2)}
                 </p>
               )}
               {recommendations.openSavingsRecomm && (
                 <p className="flex flex-row text-lg">
                   <Dot />
-                  Jūsu izdevumi uzkrājumiem nesasniedz ieteicamos 15% no neto ienākumiem - būtu vēlams tiem atvēlēt ap €{recommendations.savings}, pašlaik tie
-                  ir €{selectedReport?.investmentSpending}
+                  Jūsu izdevumi uzkrājumiem nesasniedz ieteicamos 15% no neto ienākumiem - būtu vēlams tiem atvēlēt ap €{(recommendations.savings).toFixed(2)}, pašlaik tie
+                  ir €{(selectedReport?.investmentSpending).toFixed(2)}
                 </p>
               )}
               {recommendations.openLeftover && (
                 <p className="flex flex-row text-lg">
-                  <Dot /> Jums ir radies atlikums €{leftoverMoney} apmērā - Jūs varat to ieguldīt uzkrājumos un palielināt tos līdz €
-                  {(selectedReport?.investmentSpending ?? 0) + leftoverMoney}
+                  <Dot /> Jums ir radies atlikums €{leftoverMoney.toFixed(2)} apmērā - Jūs varat to ieguldīt uzkrājumos un palielināt tos līdz €
+                  {((selectedReport?.investmentSpending ?? 0) + leftoverMoney).toFixed(2)}
                 </p>
               )}
               {recommendations.openLeftoverZero && (
@@ -195,32 +195,32 @@ const BudgetRecommendations = () => {
               )}
               {recommendations.openFood && (
                 <p className="flex flex-row text-lg">
-                  <Dot /> Jūsu izdevumi pārtikai pārsniedz ieteicamos 15% no neto ienākuma - vēlamie maksimālie pārtikas izdevumi ir €{recommendations.food},
-                  pašlaik tie ir €{selectedReport?.foodSpending}
+                  <Dot /> Jūsu izdevumi pārtikai pārsniedz ieteicamos 15% no neto ienākuma - vēlamie maksimālie pārtikas izdevumi ir €{(recommendations.food).toFixed(2)},
+                  pašlaik tie ir €{(selectedReport?.foodSpending).toFixed(2)}
                 </p>
               )}
               {recommendations.openInsurance && (
                 <p className="flex flex-row text-lg">
                   <Dot /> Jūsu izdevumi apdrošināšanai pārsniedz 25% no neto ienākuma - vēlamie maksimālie apdrošināšanas izdevumi ir €
-                  {recommendations.insurance}, pašlaik tie ir €{selectedReport?.insuranceSpending}
+                  {(recommendations.insurance).toFixed(2)}, pašlaik tie ir €{(selectedReport?.insuranceSpending).toFixed(2)}
                 </p>
               )}
               {recommendations.openTransport && (
                 <p className="flex flex-row text-lg">
-                  <Dot /> Jūsu izdevumi transportam pārsniedz 15% no neto ienākuma - vēlamie maksimālie transporta izdevumi ir €{recommendations.transport},
-                  pašlaik tie ir €{selectedReport?.transportSpending}
+                  <Dot /> Jūsu izdevumi transportam pārsniedz 15% no neto ienākuma - vēlamie maksimālie transporta izdevumi ir €{(recommendations.transport).toFixed(2)},
+                  pašlaik tie ir €{(selectedReport?.transportSpending).toFixed(2)}
                 </p>
               )}
               {recommendations.openHealth && (
                 <p className="flex flex-row text-lg">
-                  <Dot /> Jūsu izdevumi veselībai un skaistumkopšanai pārsniedz 10% no neto ienākuma - vēlamie maksimālie izdevumi ir €{recommendations.health},
-                  pašlaik tie ir €{selectedReport?.healthSpending}
+                  <Dot /> Jūsu izdevumi veselībai un skaistumkopšanai pārsniedz 10% no neto ienākuma - vēlamie maksimālie izdevumi ir €{(recommendations.health).toFixed(2)},
+                  pašlaik tie ir €{(selectedReport?.healthSpending).toFixed(2)}
                 </p>
               )}
               {recommendations.openLeisure && (
                 <p className="flex flex-row text-lg">
-                  <Dot /> Jūsu izdevumi izklaidei pārsniedz 10% no neto ienākuma - vēlamie maksimālie izklaides izdevumi ir €{recommendations.leisure}, pašlaik
-                  tie ir €{selectedReport?.leisureSpending}
+                  <Dot /> Jūsu izdevumi izklaidei pārsniedz 10% no neto ienākuma - vēlamie maksimālie izklaides izdevumi ir €{(recommendations.leisure).toFixed(2)}, pašlaik
+                  tie ir €{(selectedReport?.leisureSpending).toFixed(2)}
                 </p>
               )}
             </div>

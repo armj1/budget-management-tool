@@ -87,11 +87,11 @@ const DashboardView = (data: any) => {
           </div>
           <Card className="flex flex-col mt-3 p-4">
             <div className="flex flex-row pb-2 justify-between">
-              <Card className="p-2">Bruto ienākumi: €{selectedReport?.totalIncome}</Card>
-              <Card className="p-2">Neto ienākumi: €{selectedReport?.taxedIncome}</Card>
+              <Card className="p-2">Bruto ienākumi: €{(selectedReport?.totalIncome ?? 0).toFixed(2)}</Card>
+              <Card className="p-2">Neto ienākumi: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</Card>
               <Card className="flex flex-row p-2">
                 <Circle className="bg-[#7986CB] rounded-full mr-2" />
-                Atlikums: €{leftoverMoney}
+                Atlikums: €{leftoverMoney.toFixed(2)}
               </Card>
             </div>
             <Separator className="mb-2" />
@@ -99,59 +99,59 @@ const DashboardView = (data: any) => {
               <div className="flex flex-col justify-between">
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#FF6384] rounded-full mr-2" />
-                  Mājoklis: €{selectedReport?.housingSpending}
+                  Mājoklis: €{(selectedReport?.housingSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#36A2EB] rounded-full mr-2" />
-                  Pārtika: €{selectedReport?.foodSpending}
+                  Pārtika: €{(selectedReport?.foodSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#607D8B] rounded-full mr-2" />
-                  Transports: €{selectedReport?.transportSpending}
+                  Transports: €{(selectedReport?.transportSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#4BC0C0] rounded-full mr-2" />
-                  Veselība / skaistumkopšana: €{selectedReport?.healthSpending}
+                  Veselība / skaistumkopšana: €{(selectedReport?.healthSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#9966FF] rounded-full mr-2" />
-                  Bērni: €{selectedReport?.childSpending}
+                  Bērni: €{(selectedReport?.childSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#FF9F40] rounded-full mr-2" />
-                  Iepirkšanās / pakalpojumi: €{selectedReport?.shoppingSpending}
+                  Iepirkšanās / pakalpojumi: €{(selectedReport?.shoppingSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#1E88E5] rounded-full mr-2" />
-                  Brīvais laiks / izklaide: €{selectedReport?.leisureSpending}
+                  Brīvais laiks / izklaide: €{(selectedReport?.leisureSpending ?? 0).toFixed(2)}
                 </Card>
               </div>
               <div className="flex flex-col justify-between">
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#FF7043] rounded-full mr-2" />
-                  Izglītība: €{selectedReport?.educationSpending}
+                  Izglītība: €{(selectedReport?.educationSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#922B21] rounded-full mr-2" />
-                  Atpūta: €{selectedReport?.recreationSpending}
+                  Atpūta: €{(selectedReport?.recreationSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#5C6BC0] rounded-full mr-2" />
-                  Apdrošināšana: €{selectedReport?.insuranceSpending}
+                  Apdrošināšana: €{(selectedReport?.insuranceSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#154360] rounded-full mr-2" />
-                  Ieguldījumi / uzkrājumi: €{selectedReport?.investmentSpending}
+                  Ieguldījumi / uzkrājumi: €{(selectedReport?.investmentSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#81C784] rounded-full mr-2" />
-                  Mājdzīvnieki: €{selectedReport?.petSpending}
+                  Mājdzīvnieki: €{(selectedReport?.petSpending ?? 0).toFixed(2)}
                 </Card>
                 <Card className="flex flex-row p-2 mb-2">
                   <Circle className="bg-[#B7950B] rounded-full mr-2" />
-                  Citi izdevumi: €{selectedReport?.otherSpending}
+                  Citi izdevumi: €{(selectedReport?.otherSpending ?? 0).toFixed(2)}
                 </Card>
-                <Card className="p-2 mb-2">Kopējie izdevumi: €{totalSpending}</Card>
+                <Card className="p-2 mb-2">Kopējie izdevumi: €{totalSpending.toFixed(2)}</Card>
               </div>
             </div>
           </Card>

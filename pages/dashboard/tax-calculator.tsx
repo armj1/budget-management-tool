@@ -191,8 +191,8 @@ const TaxCalculator = () => {
             {!isNetIncomeSame && (
               <Card className="p-7 mt-2 mr-5 mb-5">
                 <p className="font-medium mb-1">Aprēķinātie neto ienākumi nesakrīt ar atskaites neto ienākumiem</p>
-                <p>Atskaitē: €{selectedReport?.taxedIncome}</p>
-                <p>Aprēķinātie: €{result.netIncome}</p>
+                <p>Atskaitē: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</p>
+                <p>Aprēķinātie: €{(result.netIncome).toFixed(2)}</p>
                 <Button className="bg-black mt-2" onClick={handleUpdate}>
                   Atjaunot datus
                 </Button>
@@ -200,12 +200,12 @@ const TaxCalculator = () => {
             )}
           </div>
           <Card className="flex flex-col justify-around p-10">
-            <Card className="p-2">Bruto ienākumi: €{selectedReport?.totalIncome}</Card>
-            <Card className="p-2">Piemērojamais neapliekamais minimums: €{result.untaxedMinimum}</Card>
-            <Card className="p-2">Atvieglojums par apgādībā esošām personām: €{result.taxCuts}</Card>
-            <Card className="p-2">Valsts sociālās apdrošināšanas obligātās iemaksas: €{result.vsaoi}</Card>
-            <Card className="p-2">Iedzīvotāju ienākumu nodoklis: €{result.incomeTax}</Card>
-            <Card className="p-2">Aprēķinātie neto ienākumi: €{result.netIncome}</Card>
+            <Card className="p-2">Bruto ienākumi: €{(selectedReport?.totalIncome ?? 0).toFixed(2)}</Card>
+            <Card className="p-2">Piemērojamais neapliekamais minimums: €{(result.untaxedMinimum).toFixed(2)}</Card>
+            <Card className="p-2">Atvieglojums par apgādībā esošām personām: €{(result.taxCuts).toFixed(2)}</Card>
+            <Card className="p-2">Valsts sociālās apdrošināšanas obligātās iemaksas: €{(result.vsaoi).toFixed(2)}</Card>
+            <Card className="p-2">Iedzīvotāju ienākumu nodoklis: €{(result.incomeTax).toFixed(2)}</Card>
+            <Card className="p-2">Aprēķinātie neto ienākumi: €{(result.netIncome).toFixed(2)}</Card>
           </Card>
         </div>
       </div>
