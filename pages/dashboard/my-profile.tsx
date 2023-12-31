@@ -19,6 +19,9 @@ const MyProfile = (data: any) => {
   const router = useRouter();
 
   const [toDelete, setToDelete] = useState(false);
+  const [showFirstNameError, setShowFirstNameError] = useState(false);
+  const [showLastNameError, setShowLastNameError] = useState(false);
+  const [showEmailError, setShowEmailError] = useState(false);
   const [showPasswordLengthError, setShowPasswordLengthError] = useState(false);
   const [showPasswordMatchError, setShowPasswordMatchError] = useState(false);
 
@@ -48,7 +51,23 @@ const MyProfile = (data: any) => {
       if (response.ok) {
         router.reload();
       }
+      if (formData.firstName.trim() === "") {
+        setShowFirstNameError(true);
+      } else {
+        setShowFirstNameError(false);
+      }
 
+      if (formData.lastName.trim() === "") {
+        setShowLastNameError(true);
+      } else {
+        setShowLastNameError(false);
+      }
+
+      if (!/^\S+@\S+\.\S{2,}$/.test(formData.email)) {
+        setShowEmailError(true);
+      } else {
+        setShowEmailError(false);
+      }
       if (formData.password.length < 8) {
         setShowPasswordLengthError(true);
       } else {
@@ -90,21 +109,33 @@ const MyProfile = (data: any) => {
         <Card className="flex flex-col justify-between p-10 w-2/6">
           <div className="pb-2">
             <Label>Vārds</Label>
-            <Input placeholder={data.firstName} value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} />
+            <Input
+              placeholder={data.firstName}
+              value={formData.firstName}
+              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+            />
+            {showFirstNameError && <p className="flex text-red-600 justify-center text-sm">Vārds nevar būt tukšs</p>}
           </div>
           <div className="pb-2">
             <Label>Uzvārds</Label>
             <Input placeholder={data.lastName} value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} />
+            {showLastNameError && <p className="flex text-red-600 justify-center text-sm">Uzvārds nevar būt tukšs</p>}
           </div>
           <div className="pb-2">
             <Label>E-pasts</Label>
             <Input placeholder={data.email} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+            {showEmailError && <p className="flex text-red-600 justify-center text-sm">Nepareizs e-pasta formats</p>}
           </div>
           <Separator />
           <p className="flex font-medium justify-end">Ievadiet esošu vai jaunu paroli</p>
           <div className="">
             <Label>Parole</Label>
-            <Input type="password" placeholder="Parole" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+            <Input
+              type="password"
+              placeholder="Parole"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            />
             {showPasswordLengthError && <p className="flex text-red-600 justify-center text-sm">Parolei jābūt vismaz 8 simbolus garai</p>}
           </div>
           <div>
@@ -117,7 +148,7 @@ const MyProfile = (data: any) => {
             />
             {showPasswordMatchError && <p className="flex text-red-600 justify-center text-sm">Ievadītās paroles nesakrīt</p>}
           </div>
-          <Button className="bg-black mt-6" onClick={updateSubmit}>
+          <Button className="bg-black mt-2" onClick={updateSubmit}>
             Rediģēt datus
           </Button>
         </Card>
