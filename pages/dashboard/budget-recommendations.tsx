@@ -161,7 +161,7 @@ const BudgetRecommendations = () => {
       <div className="flex flex-col bg-slate-300 h-[calc(100vh-88px)]	p-10">
         <div className="flex flex-row mb-5">
           <p className="flex flex-col justify-center font-medium ml-2 mr-3">Izvēlieties vienu no atskaitēm, lai saņemtu rekomendācijas</p>
-          <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
+          <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
         </div>
         <Card className="p-10">
           {!selectedReport && <p className="text-xl">Nav atskaites - nav padomu!</p>}

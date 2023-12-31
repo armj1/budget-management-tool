@@ -36,6 +36,7 @@ const EditBudgetReport = () => {
   };
 
   const [financialReports, setFinancialReports] = useState<FinancialRecord[]>([]);
+  const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
 
   console.log(financialReports);
   useEffect(() => {
@@ -54,6 +55,7 @@ const EditBudgetReport = () => {
   }, []);
 
   const handleReportSelect = (report: FinancialRecord) => {
+    setSelectedReport(report);
     setFormData({
       id: report.id,
       title: report.title,
@@ -137,7 +139,7 @@ const EditBudgetReport = () => {
       <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
         <div className="flex flex-col">
           <p className="text-lg pb-2">Pirms rediģēšanas, lūdzu, izvēlieties vajadzīgo atskaiti sarakstā</p>
-          <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
+          <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
         </div>
         <div>
           <Card className="flex flex-col p-10">

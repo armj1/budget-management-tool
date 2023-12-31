@@ -156,7 +156,7 @@ const TaxCalculator = () => {
             Izvēlētā atskaite: <b>{selectedReport?.title}</b>
           </p>
           <div className="w-1/2">
-            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
+            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
           </div>
         </div>
         <div className="flex flex-row">

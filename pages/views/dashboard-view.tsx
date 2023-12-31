@@ -83,7 +83,7 @@ const DashboardView = (data: any) => {
             <p className="flex flex-col justify-center">
               Atvērta atskaite: <b>{selectedReport?.title}</b>
             </p>
-            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
+            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
           </div>
           <Card className="flex flex-col mt-3 p-4">
             <div className="flex flex-row pb-2 justify-between">

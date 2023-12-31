@@ -62,7 +62,7 @@ const DeleteBudgetReport = () => {
             <p className="flex justify-center pb-2">
               Izvēlētās atskaites nosaukums: <b>{selectedReport?.title}</b>
             </p>
-            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
+            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
           </div>
 
           <Button variant="destructive" onClick={handleDelete}>

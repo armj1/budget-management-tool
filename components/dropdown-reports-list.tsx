@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 interface DropdownReportsListProps {
   financialReports: FinancialRecord[];
   onSelectReport: (report: FinancialRecord) => void;
+  selectedReport?: FinancialRecord;
 }
 
 const DropdownReportsList = (props: DropdownReportsListProps) => {
@@ -16,7 +17,11 @@ const DropdownReportsList = (props: DropdownReportsListProps) => {
       <DropdownMenuContent className="w-80 mr-5 ml-5">
         {props.financialReports &&
           props.financialReports.map((report) => (
-            <DropdownMenuItem key={report.id} onClick={() => props.onSelectReport(report)}>
+            <DropdownMenuItem
+              key={report.id}
+              onClick={() => props.onSelectReport(report)}
+              className={props.selectedReport && report.id === props.selectedReport.id ? "font-bold" : ""}
+            >
               {report.title}
             </DropdownMenuItem>
           ))}
