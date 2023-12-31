@@ -9,6 +9,12 @@ interface RegistrationProps {
 }
 
 const RegistrationCard = (props: RegistrationProps) => {
+  const [showFirstNameError, setShowFirstNameError] = useState(false);
+  const [showLastNameError, setShowLastNameError] = useState(false);
+  const [showEmailError, setShowEmailError] = useState(false);
+  const [showPasswordLengthError, setShowPasswordLengthError] = useState(false);
+  const [showPasswordMatchError, setShowPasswordMatchError] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -36,6 +42,36 @@ const RegistrationCard = (props: RegistrationProps) => {
         console.log("User created:", data.user);
         props.onClose();
       }
+
+      if (formData.firstName.trim() === "") {
+        setShowFirstNameError(true);
+      } else {
+        setShowFirstNameError(false);
+      }
+
+      if (formData.lastName.trim() === "") {
+        setShowLastNameError(true);
+      } else {
+        setShowLastNameError(false);
+      }
+
+      if (!/^\S+@\S+\.\S{2,}$/.test(formData.email)) {
+        setShowEmailError(true);
+      } else {
+        setShowEmailError(false);
+      }
+
+      if (formData.password.length < 8) {
+        setShowPasswordLengthError(true);
+      } else {
+        setShowPasswordLengthError(false);
+      }
+
+      if (formData.confirmPassword != formData.password) {
+        setShowPasswordMatchError(true);
+      } else {
+        setShowPasswordMatchError(false);
+      }
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -53,19 +89,26 @@ const RegistrationCard = (props: RegistrationProps) => {
       <div className="flex flex-col items-center">
         <p className="text-lg">REĢISTRĀCIJA</p>
         <p className="flex pb-5 font-bold">Ievadiet pieprasītos datus</p>
-        <Input className="mb-3 w-3/4" type="text" placeholder="Vārds" name="firstName" value={formData.firstName} onChange={handleChange} required />
-        <Input className="mb-3 w-3/4" type="text" placeholder="Uzvārds" name="lastName" value={formData.lastName} onChange={handleChange} required />
-        <Input className="mb-3 w-3/4" type="email" placeholder="E-pasts" name="email" value={formData.email} onChange={handleChange} required />
-        <Input className="mb-3 w-3/4" type="password" placeholder="Parole" name="password" value={formData.password} onChange={handleChange} required />
-        <Input
-          className="mb-3 w-3/4"
-          type="password"
-          placeholder="Atkārtot paroli"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
+        <div className="mb-3 w-3/4">
+          <Input type="text" placeholder="Vārds" name="firstName" value={formData.firstName} onChange={handleChange} required />
+          {showFirstNameError && <p className="flex text-red-600 justify-center text-sm">Vārds nevar būt tukšs</p>}
+        </div>
+        <div className="mb-3 w-3/4">
+          <Input type="text" placeholder="Uzvārds" name="lastName" value={formData.lastName} onChange={handleChange} required />
+          {showLastNameError && <p className="flex text-red-600 justify-center text-sm">Uzvārds nevar būt tukšs</p>}
+        </div>
+        <div className="flex flex-col mb-3 w-3/4">
+          <Input type="email" placeholder="E-pasts" name="email" value={formData.email} onChange={handleChange} required />
+          {showEmailError && <p className="flex text-red-600 justify-center text-sm">Nepareizs e-pasta formats</p>}
+        </div>
+        <div className="mb-3 w-3/4">
+          <Input type="password" placeholder="Parole" name="password" value={formData.password} onChange={handleChange} required />
+          {showPasswordLengthError && <p className="flex text-red-600 justify-center text-sm">Parolei jābūt vismaz 8 simbolus garai</p>}
+        </div>
+        <div className="mb-3 w-3/4">
+          <Input type="password" placeholder="Atkārtot paroli" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+          {showPasswordMatchError && <p className="flex text-red-600 justify-center text-sm">Ievadītās paroles nesakrīt</p>}
+        </div>
         <Button className="text-base mb-6 bg-black w-1/2" onClick={onRegistration}>
           Reģistrēties
         </Button>
