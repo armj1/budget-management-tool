@@ -11,6 +11,7 @@ import { CircleDollarSign } from "lucide-react";
 
 export default function Home() {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -36,7 +37,7 @@ export default function Home() {
     if (result?.ok) {
       router.push("/dashboard");
     } else {
-      alert("Pieteikšanās neizdevās! Pārbaudiet vai ievadītie dati ir pareizi!");
+      setShowError(true);
     }
   };
 
@@ -49,8 +50,12 @@ export default function Home() {
       <Card className="flex flex-col items-center mt-10 mb-20 p-6 w-1/3">
         <CircleDollarSign className="w-6 h-6 mb-2" />
         <p className="text-3xl mb-10">BUDŽETA PĀRVALDES RĪKS</p>
-        <Input className="mb-3" type="email" placeholder="E-pasts" name="email" value={formData.email} onChange={handleChange} />
-        <Input className="mb-3" type="password" placeholder="Parole" name="password" value={formData.password} onChange={handleChange} />
+        <div className="w-2/3 mb-3">
+          <Input className="mb-3" type="email" placeholder="E-pasts" name="email" value={formData.email} onChange={handleChange} />
+          <Input type="password" placeholder="Parole" name="password" value={formData.password} onChange={handleChange} />
+          {showError && <p className="flex text-red-600 justify-center text-sm mt-2">Ievadītie dati nav pareizi</p>}
+        </div>
+
         <Button className="bg-black w-1/2" onClick={handleSubmit}>
           Pieteikties
         </Button>
