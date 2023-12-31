@@ -257,17 +257,16 @@ const BudgetNewReportCard = () => {
   };
 
   return (
-    <Card className="flex flex-col p-10">
+    <Card className="flex flex-col pr-10 pt-10 pl-10 pb-5">
       <div className="flex flex-row pb-5">
-        <div className="pr-10">
+        <div className="flex flex-col pr-10">
           <div className="flex flex-col mb-2">
-            <p className="font-medium mb-2">Atskaites nosaukums</p>
+            <Label className="mb-2">Atskaites nosaukums</Label>
             <Input placeholder="Atskaites nosaukums" value={formData.title} type="text" name="title" onChange={handleChange} />
             {showTitleError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
           </div>
-          <p className="font-medium mb-2 mt-6">Ienākumi</p>
           <div className="flex flex-col mb-2">
-            <Label className="mb-1">Bruto ienākumi</Label>
+            <Label className="mb-2">Bruto ienākumi</Label>
             <Input placeholder="Bruto ienākumi" value={formData.totalIncome} type="number" min="0" name="totalIncome" onChange={handleChange} />
             {showTotalIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
             {showTotalIncomeDecimalError && !showTotalIncomeEmptyError && (
@@ -275,44 +274,26 @@ const BudgetNewReportCard = () => {
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Neto ienākumi</Label>
-            <Input
-              className="mb-6"
-              placeholder="Neto ienākumi"
-              value={formData.taxedIncome}
-              type="number"
-              min="0"
-              name="taxedIncome"
-              onChange={handleChange}
-            />
+            <Label className="mb-2">Neto ienākumi</Label>
+            <Input placeholder="Neto ienākumi" value={formData.taxedIncome} type="number" min="0" name="taxedIncome" onChange={handleChange} />
             {showTaxedIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
             {showTaxedIncomeDecimalError && !showTaxedIncomeEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
           </div>
-          <p className="font-medium mb-2">Izdevumi</p>
           <div className="flex flex-col mb-2">
-            <Label>Mājoklis</Label>
-            <Input
-              className="mb-2"
-              placeholder="Mājoklis"
-              value={formData.housingSpending}
-              type="number"
-              min="0"
-              name="housingSpending"
-              onChange={handleChange}
-            />
+            <Label className="mb-2">Mājokļa izdevumi</Label>
+            <Input placeholder="Mājoklis" value={formData.housingSpending} type="number" min="0" name="housingSpending" onChange={handleChange} />
             {showHousingEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
             {showHousingDecimalError && !showHousingEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
           </div>
         </div>
-        <div className="pr-10">
+        <div className="flex flex-col pr-10">
           <div className="flex flex-col mb-2">
-            <Label className="mt-8">Transports</Label>
+            <Label className="mb-2">Transporta izdevumi</Label>
             <Input
-              className="mb-2 "
               placeholder="Transports"
               value={formData.transportSpending}
               type="number"
@@ -326,25 +307,17 @@ const BudgetNewReportCard = () => {
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Pārtika</Label>
-            <Input
-              className="mb-2"
-              placeholder="Pārtika"
-              value={formData.foodSpending}
-              type="number"
-              min="0"
-              name="foodSpending"
-              onChange={handleChange}
-            />
+            <Label className="mb-2">Pārtikas izdevumi</Label>
+            <Input placeholder="Pārtika" value={formData.foodSpending} type="number" min="0" name="foodSpending" onChange={handleChange} />
             {showFoodEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
             {showFoodDecimalError && !showFoodEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Veselība / skaistumkopšana</Label>
+            <Label className="mb-2">Veselības / skaistumkopšanas izdevumi</Label>
             <Input
-              className="mb-2 mr-7"
+            className="mr-7"
               placeholder="Veselība / skaistumkopšana"
               value={formData.healthSpending}
               type="number"
@@ -358,25 +331,19 @@ const BudgetNewReportCard = () => {
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Bērni</Label>
-            <Input
-              className="mb-2"
-              placeholder="Bērni"
-              value={formData.childSpending}
-              type="number"
-              min="0"
-              name="childSpending"
-              onChange={handleChange}
-            />
+            <Label className="mb-2">Bērnu izdevumi</Label>
+            <Input placeholder="Bērni" value={formData.childSpending} type="number" min="0" name="childSpending" onChange={handleChange} />
             {showChildEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
             {showChildDecimalError && !showChildEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
           </div>
+        </div>
+        <div className="flex flex-col pr-10">
           <div className="flex flex-col mb-2">
-            <Label>Iepirkšanās / pakalpojumi</Label>
+            <Label className="mb-2">Iepirkšanās / pakalpojumu izdevumi</Label>
             <Input
-              className="mb-2 mr-7"
+            className="mr-4"
               placeholder="Iepirkšanās / pakalpojumi"
               value={formData.shoppingSpending}
               type="number"
@@ -390,9 +357,8 @@ const BudgetNewReportCard = () => {
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Brīvais laiks / izklaide</Label>
+            <Label className="mb-2">Brīvais laiks / izklaides izdevumi</Label>
             <Input
-              className="mb-2"
               placeholder="Brīvais laiks / izklaide"
               value={formData.leisureSpending}
               type="number"
@@ -405,12 +371,9 @@ const BudgetNewReportCard = () => {
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
           </div>
-        </div>
-        <div>
           <div className="flex flex-col mb-2">
-            <Label className="mt-8">Izglītība</Label>
+            <Label className="mb-2">Izglītības izdevumi</Label>
             <Input
-              className="mb-2"
               placeholder="Izglītība"
               value={formData.educationSpending}
               type="number"
@@ -424,25 +387,18 @@ const BudgetNewReportCard = () => {
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Atpūta</Label>
-            <Input
-              className="mb-2"
-              placeholder="Atpūta"
-              value={formData.recreationSpending}
-              type="number"
-              min="0"
-              name="recreationSpending"
-              onChange={handleChange}
-            />
+            <Label className="mb-2">Atpūtas izdevumi</Label>
+            <Input placeholder="Atpūta" value={formData.recreationSpending} type="number" min="0" name="recreationSpending" onChange={handleChange} />
             {showRecreationEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
             {showRecreationDecimalError && !showRecreationEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
           </div>
+        </div>
+        <div className="flex flex-col">
           <div className="flex flex-col mb-2">
-            <Label>Apdrošināšana</Label>
+            <Label className="mb-2">Apdrošināšanas izdevumi</Label>
             <Input
-              className="mb-2"
               placeholder="Apdrošināšana"
               value={formData.insuranceSpending}
               type="number"
@@ -456,9 +412,8 @@ const BudgetNewReportCard = () => {
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Ieguldījumi / uzkrājumi</Label>
+            <Label className="mb-2">Ieguldījumu / uzkrājumu izdevumi</Label>
             <Input
-              className="mb-2"
               placeholder="Ieguldījumi / uzkrājumi"
               value={formData.investmentSpending}
               type="number"
@@ -472,32 +427,16 @@ const BudgetNewReportCard = () => {
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Mājdzīvnieki</Label>
-            <Input
-              className="mb-2"
-              placeholder="Mājdzīvnieki"
-              value={formData.petSpending}
-              type="number"
-              min="0"
-              name="petSpending"
-              onChange={handleChange}
-            />
+            <Label className="mb-2">Mājdzīvnieku izdevumi</Label>
+            <Input placeholder="Mājdzīvnieki" value={formData.petSpending} type="number" min="0" name="petSpending" onChange={handleChange} />
             {showPetEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
             {showPetDecimalError && !showPetEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label>Citi izdevumi</Label>
-            <Input
-              className="mb-2"
-              placeholder="Citi izdevumi"
-              value={formData.otherSpending}
-              type="number"
-              min="0"
-              name="otherSpending"
-              onChange={handleChange}
-            />
+            <Label className="mb-2">Citi izdevumi</Label>
+            <Input placeholder="Citi izdevumi" value={formData.otherSpending} type="number" min="0" name="otherSpending" onChange={handleChange} />
             {showOtherEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
             {showOtherDecimalError && !showOtherEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
