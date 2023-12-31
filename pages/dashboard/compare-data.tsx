@@ -48,6 +48,7 @@ const CompareData = () => {
   };
 
   const canCompare = financialReports.length >= 2;
+  const bothReportsSelected = selectedReport1 && selectedReport2;
 
   return (
     <NavbarLayout currentPage="compareData">
@@ -123,7 +124,7 @@ const CompareData = () => {
             </div>
           )}
         </div>
-        {canCompare && (
+        {canCompare && bothReportsSelected && (
           <Card className="flex flex-col mt-3 p-4 w-1/2 h-5/6">
             <div className="flex flex-row pb-2 justify-between">
               <Card className="flex flex-row p-2">
