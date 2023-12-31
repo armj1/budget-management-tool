@@ -145,7 +145,7 @@ const TaxCalculator = () => {
   };
   
   return (
-    <NavbarLayout>
+    <NavbarLayout currentPage="taxCalculator">
       <Head>
         <title>Nodokļu kalkulators</title>
         <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>

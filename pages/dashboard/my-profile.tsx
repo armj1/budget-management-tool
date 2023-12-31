@@ -56,7 +56,7 @@ const MyProfile = (data: any) => {
   };
 
   return (
-    <NavbarLayout>
+    <NavbarLayout currentPage="myProfile">
       <Head>
         <title>Mans profils</title>
         <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>

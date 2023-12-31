@@ -152,7 +152,7 @@ const BudgetRecommendations = () => {
   }, [recommendations.isRecommendation]);
 
   return (
-    <NavbarLayout>
+    <NavbarLayout currentPage="budgetRecommendations">
       <Head>
         <title>Budžeta rekomendācijas</title>
         <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>

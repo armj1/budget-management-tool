@@ -57,9 +57,9 @@ const CompareData = () => {
   const canCompare = financialReports.length >= 2;
 
   return (
-    <NavbarLayout>
+    <NavbarLayout currentPage="compareData">
       <Head>
-        <title>Atskaišu salīdzināšana</title>
+        <title>Salīdzināt atskaites</title>
         <link
           rel="icon"
           href="/circle-dollar-sign.svg"
