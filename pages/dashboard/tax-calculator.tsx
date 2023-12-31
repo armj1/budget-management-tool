@@ -1,7 +1,7 @@
+import DropdownReportsList from "@/components/dropdown-reports-list";
 import NavbarLayout from "@/components/navbar-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FinancialRecord from "@/interfaces/FinancialRecord";
@@ -67,7 +67,7 @@ const TaxCalculator = () => {
     let taxCuts = 0;
     let incomeTax = 0;
     const income = selectedReport?.totalIncome ?? 0;
-    const vsaoi = Math.round((income * 0.105) * 100) / 100;
+    const vsaoi = Math.round(income * 0.105 * 100) / 100;
 
     if (isNeapliekamaisMinimumsChecked) {
       untaxedMinimum = Math.round(preciseNeapliekamaisMinimumsValue * 100) / 100;
@@ -76,7 +76,7 @@ const TaxCalculator = () => {
     } else {
       untaxedMinimum = (6000 - 0.38462 * (income * 12 * 1.06 - 6000)) / 12;
       untaxedMinimum = Math.min(untaxedMinimum, 500);
-      untaxedMinimum = Math.round(untaxedMinimum*100)/100
+      untaxedMinimum = Math.round(untaxedMinimum * 100) / 100;
     }
 
     if (isAlgasGramatinaChecked === false) {
@@ -118,7 +118,6 @@ const TaxCalculator = () => {
     }
   }, [selectedReport, areNetIncomesDifferent]);
 
-
   const handleUpdate = async () => {
     try {
       const response = await fetch("/api/updateNetIncome", {
@@ -143,7 +142,7 @@ const TaxCalculator = () => {
       console.error("Error updating user:", error);
     }
   };
-  
+
   return (
     <NavbarLayout currentPage="taxCalculator">
       <Head>
@@ -156,21 +155,9 @@ const TaxCalculator = () => {
           <p className="pb-3">
             Izvēlētā atskaite: <b>{selectedReport?.title}</b>
           </p>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="w-1/2" variant="outline">
-                Pieejamās atskaites
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80 ml-5">
-              {financialReports &&
-                financialReports.map((report) => (
-                  <DropdownMenuItem key={report.id} onClick={() => handleReportSelect(report)}>
-                    {report.title}
-                  </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="w-1/2">
+            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
+          </div>
         </div>
         <div className="flex flex-row">
           <div className="flex flex-col w-1/2">
@@ -206,7 +193,9 @@ const TaxCalculator = () => {
                 <p className="font-medium mb-1">Aprēķinātie neto ienākumi nesakrīt ar atskaites neto ienākumiem</p>
                 <p>Atskaitē: €{selectedReport?.taxedIncome}</p>
                 <p>Aprēķinātie: €{result.netIncome}</p>
-                <Button className="bg-black mt-2" onClick={handleUpdate} >Atjaunot datus</Button>
+                <Button className="bg-black mt-2" onClick={handleUpdate}>
+                  Atjaunot datus
+                </Button>
               </Card>
             )}
           </div>

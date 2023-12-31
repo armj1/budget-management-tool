@@ -1,6 +1,6 @@
+import DropdownReportsList from "@/components/dropdown-reports-list";
 import NavbarLayout from "@/components/navbar-layout";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import FinancialRecord from "@/interfaces/FinancialRecord";
 import Head from "next/head";
 import router from "next/router";
@@ -62,21 +62,7 @@ const DeleteBudgetReport = () => {
             <p className="flex justify-center pb-2">
               Izvēlētās atskaites nosaukums: <b>{selectedReport?.title}</b>
             </p>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="" variant="outline">
-                  Pieejamās budžeta atskaites
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-80">
-                {financialReports &&
-                  financialReports.map((report) => (
-                    <DropdownMenuItem key={report.id} onClick={() => handleReportSelect(report)}>
-                      {report.title}
-                    </DropdownMenuItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
           </div>
 
           <Button variant="destructive" onClick={handleDelete}>

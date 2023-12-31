@@ -1,3 +1,4 @@
+import DropdownReportsList from "@/components/dropdown-reports-list";
 import NavbarLayout from "@/components/navbar-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -160,19 +161,7 @@ const BudgetRecommendations = () => {
       <div className="flex flex-col bg-slate-300 h-[calc(100vh-88px)]	p-10">
         <div className="flex flex-row mb-5">
           <p className="flex flex-col justify-center font-medium ml-2 mr-3">Izvēlieties vienu no atskaitēm, lai saņemtu rekomendācijas</p>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Pieejamās budžeta atskaites</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80">
-              {financialReports &&
-                financialReports.map((report) => (
-                  <DropdownMenuItem key={report.id} onClick={() => handleReportSelect(report)}>
-                    {report.title}
-                  </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
         </div>
         <Card className="p-10">
           {!selectedReport && <p className="text-xl">Nav atskaites - nav padomu!</p>}
@@ -230,8 +219,8 @@ const BudgetRecommendations = () => {
               )}
               {recommendations.openLeisure && (
                 <p className="flex flex-row text-lg">
-                  <Dot /> Jūsu izdevumi izklaidei pārsniedz 10% no neto ienākuma - vēlamie maksimālie izklaides izdevumi ir €{recommendations.leisure},
-                  pašlaik tie ir €{selectedReport?.leisureSpending}
+                  <Dot /> Jūsu izdevumi izklaidei pārsniedz 10% no neto ienākuma - vēlamie maksimālie izklaides izdevumi ir €{recommendations.leisure}, pašlaik
+                  tie ir €{selectedReport?.leisureSpending}
                 </p>
               )}
             </div>

@@ -1,13 +1,12 @@
 import Head from "next/head";
 import NavbarLayout from "@/components/navbar-layout";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import FinancialRecord from "@/interfaces/FinancialRecord";
 import { useEffect, useState } from "react";
 import SpendingPieChart from "@/components/pie-chart";
 import { Circle } from "lucide-react";
+import DropdownReportsList from "@/components/dropdown-reports-list";
 
 const DashboardView = (data: any) => {
   const [financialReports, setFinancialReports] = useState<FinancialRecord[]>([]);
@@ -84,21 +83,7 @@ const DashboardView = (data: any) => {
             <p className="flex flex-col justify-center">
               Atvērta atskaite: <b>{selectedReport?.title}</b>
             </p>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="w-1/2" variant="outline">
-                  Pieejamās budžeta atskaites
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-80">
-                {financialReports &&
-                  financialReports.map((report) => (
-                    <DropdownMenuItem key={report.id} onClick={() => handleReportSelect(report)}>
-                      {report.title}
-                    </DropdownMenuItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
           </div>
           <Card className="flex flex-col mt-3 p-4">
             <div className="flex flex-row pb-2 justify-between">

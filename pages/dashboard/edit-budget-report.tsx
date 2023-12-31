@@ -1,6 +1,5 @@
 import NavbarLayout from "@/components/navbar-layout";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import FinancialRecord from "@/interfaces/FinancialRecord";
@@ -8,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import router from "next/router";
 import { Label } from "@/components/ui/label";
+import DropdownReportsList from "@/components/dropdown-reports-list";
 
 const EditBudgetReport = () => {
   const [formData, setFormData] = useState({
@@ -137,19 +137,7 @@ const EditBudgetReport = () => {
       <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
         <div className="flex flex-col">
           <p className="text-lg pb-2">Pirms rediģēšanas, lūdzu, izvēlieties vajadzīgo atskaiti sarakstā</p>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Pieejamās budžeta atskaites</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80">
-              {financialReports &&
-                financialReports.map((report) => (
-                  <DropdownMenuItem key={report.id} onClick={() => handleReportSelect(report)}>
-                    {report.title}
-                  </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} />
         </div>
         <div>
           <Card className="flex flex-col p-10">
