@@ -147,7 +147,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
       }
 
       const decimalRegex = /^\d+(\.\d{1,2})?$/;
-      if (formData.totalIncome === "" || formData.totalIncome === null || formData.totalIncome === undefined) {
+      if (!formData.totalIncome) {
         setShowTotalIncomeEmptyError(true);
       } else {
         setShowTotalIncomeEmptyError(false);
@@ -158,7 +158,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
         setShowTotalIncomeDecimalError(false);
       }
 
-      if (formData.taxedIncome === "" || formData.taxedIncome === null || formData.taxedIncome === undefined) {
+      if (!formData.taxedIncome) {
         setShowTaxedIncomeEmptyError(true);
       } else {
         setShowTaxedIncomeEmptyError(false);
@@ -349,7 +349,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
                       name="totalIncome"
                       onChange={handleChange}
                     />
-                    {showTotalIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showTotalIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs vai 0</p>}
                     {showTotalIncomeDecimalError && !showTotalIncomeEmptyError && (
                       <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
                     )}
@@ -364,7 +364,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
                       name="taxedIncome"
                       onChange={handleChange}
                     />
-                    {showTaxedIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showTaxedIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs vai 0</p>}
                     {showTaxedIncomeDecimalError && !showTaxedIncomeEmptyError && (
                       <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
                     )}

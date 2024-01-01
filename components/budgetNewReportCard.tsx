@@ -87,7 +87,7 @@ const BudgetNewReportCard = () => {
       }
 
       const decimalRegex = /^\d+(\.\d{1,2})?$/;
-      if (formData.totalIncome === "" || formData.totalIncome === null || formData.totalIncome === undefined) {
+      if (!formData.totalIncome) {
         setShowTotalIncomeEmptyError(true);
       } else {
         setShowTotalIncomeEmptyError(false);
@@ -98,7 +98,7 @@ const BudgetNewReportCard = () => {
         setShowTotalIncomeDecimalError(false);
       }
 
-      if (formData.taxedIncome === "" || formData.taxedIncome === null || formData.taxedIncome === undefined) {
+      if (!formData.taxedIncome) {
         setShowTaxedIncomeEmptyError(true);
       } else {
         setShowTaxedIncomeEmptyError(false);
@@ -268,7 +268,7 @@ const BudgetNewReportCard = () => {
           <div className="flex flex-col mb-2">
             <Label className="mb-2">Bruto ienākumi</Label>
             <Input placeholder="Bruto ienākumi" value={formData.totalIncome} type="number" min="0" name="totalIncome" onChange={handleChange} />
-            {showTotalIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+            {showTotalIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs vai 0</p>}
             {showTotalIncomeDecimalError && !showTotalIncomeEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
@@ -276,7 +276,7 @@ const BudgetNewReportCard = () => {
           <div className="flex flex-col mb-2">
             <Label className="mb-2">Neto ienākumi</Label>
             <Input placeholder="Neto ienākumi" value={formData.taxedIncome} type="number" min="0" name="taxedIncome" onChange={handleChange} />
-            {showTaxedIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+            {showTaxedIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs vai 0</p>}
             {showTaxedIncomeDecimalError && !showTaxedIncomeEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
