@@ -7,32 +7,28 @@ import { useEffect, useState } from "react";
 import SpendingPieChart from "@/components/pie-chart";
 import { Circle } from "lucide-react";
 import DropdownReportsList from "@/components/dropdown-reports-list";
+import { Button } from "@/components/ui/button";
+import router from "next/router";
+import { PrismaClient } from "@prisma/client";
+import { GetServerSidePropsContext } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
+
+interface DashboardViewProps {
+  data: any;
+}
 
 const DashboardView = (data: any) => {
-  const [financialReports, setFinancialReports] = useState<FinancialRecord[]>([]);
-
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
-
-  useEffect(() => {
-    const fetchFinancialReports = async () => {
-      try {
-        const response = await fetch("/api/getFinancialRecord");
-        if (response.ok) {
-          const data = await response.json();
-          setFinancialReports(data.financialRecords);
-          const newestReport = data.financialRecords[0];
-          setSelectedReport(newestReport);
-        }
-      } catch (error) {
-        console.error("Error fetching financial reports:", error);
-      }
-    };
-    fetchFinancialReports();
-  }, []);
 
   const handleReportSelect = (report: FinancialRecord) => {
     setSelectedReport(report);
   };
+
+  useEffect(() => {
+    const newestReport = data.financialReports[0];
+    setSelectedReport(newestReport);
+  }, []);
 
   const totalSpending =
     (selectedReport?.childSpending ?? 0) +
@@ -68,97 +64,126 @@ const DashboardView = (data: any) => {
     Atlikums: leftoverMoney ?? 0,
   };
 
+  const hasReports = data.financialReports.length > 0;
+
   return (
     <NavbarLayout currentPage="dashboard">
       <Head>
         <title>Sākumlapa</title>
         <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
-      <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
-        <div className="w-1/2">
-          <SpendingPieChart spendingData={spendingData} />
-        </div>
-        <div className="flex flex-col w-1/2">
-          <div className="flex flex-row justify-between">
-            <p className="flex flex-col justify-center">
-              Atvērta atskaite: <b>{selectedReport?.title}</b>
-            </p>
-            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
+      {hasReports ? (
+        <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
+          <div className="w-1/2">
+            <SpendingPieChart spendingData={spendingData} />
           </div>
-          <Card className="flex flex-col mt-3 p-4">
-            <div className="flex flex-row pb-2 justify-between">
-              <Card className="p-2">Bruto ienākumi: €{(selectedReport?.totalIncome ?? 0).toFixed(2)}</Card>
-              <Card className="p-2">Neto ienākumi: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</Card>
-              <Card className="flex flex-row p-2">
-                <Circle className="bg-[#7986CB] rounded-full mr-2" />
-                Atlikums: €{leftoverMoney.toFixed(2)}
-              </Card>
+          <div className="flex flex-col w-1/2">
+            <div className="flex flex-row justify-between">
+              <p className="flex flex-col justify-center">
+                Atvērta atskaite: <b>{selectedReport?.title}</b>
+              </p>
+              <DropdownReportsList financialReports={data.financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport} />
             </div>
-            <Separator className="mb-2" />
-            <div className="flex flex-row justify-around">
-              <div className="flex flex-col justify-between">
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#FF6384] rounded-full mr-2" />
-                  Mājoklis: €{(selectedReport?.housingSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#36A2EB] rounded-full mr-2" />
-                  Pārtika: €{(selectedReport?.foodSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#607D8B] rounded-full mr-2" />
-                  Transports: €{(selectedReport?.transportSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#4BC0C0] rounded-full mr-2" />
-                  Veselība / skaistumkopšana: €{(selectedReport?.healthSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#9966FF] rounded-full mr-2" />
-                  Bērni: €{(selectedReport?.childSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#FF9F40] rounded-full mr-2" />
-                  Iepirkšanās / pakalpojumi: €{(selectedReport?.shoppingSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#1E88E5] rounded-full mr-2" />
-                  Brīvais laiks / izklaide: €{(selectedReport?.leisureSpending ?? 0).toFixed(2)}
+            <Card className="flex flex-col mt-3 p-4">
+              <div className="flex flex-row pb-2 justify-between">
+                <Card className="p-2">Bruto ienākumi: €{(selectedReport?.totalIncome ?? 0).toFixed(2)}</Card>
+                <Card className="p-2">Neto ienākumi: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</Card>
+                <Card className="flex flex-row p-2">
+                  <Circle className="bg-[#7986CB] rounded-full mr-2" />
+                  Atlikums: €{leftoverMoney.toFixed(2)}
                 </Card>
               </div>
-              <div className="flex flex-col justify-between">
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#FF7043] rounded-full mr-2" />
-                  Izglītība: €{(selectedReport?.educationSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#922B21] rounded-full mr-2" />
-                  Atpūta: €{(selectedReport?.recreationSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#5C6BC0] rounded-full mr-2" />
-                  Apdrošināšana: €{(selectedReport?.insuranceSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#154360] rounded-full mr-2" />
-                  Ieguldījumi / uzkrājumi: €{(selectedReport?.investmentSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#81C784] rounded-full mr-2" />
-                  Mājdzīvnieki: €{(selectedReport?.petSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="flex flex-row p-2 mb-2">
-                  <Circle className="bg-[#B7950B] rounded-full mr-2" />
-                  Citi izdevumi: €{(selectedReport?.otherSpending ?? 0).toFixed(2)}
-                </Card>
-                <Card className="p-2 mb-2">Kopējie izdevumi: €{totalSpending.toFixed(2)}</Card>
+              <Separator className="mb-2" />
+              <div className="flex flex-row justify-around">
+                <div className="flex flex-col justify-between">
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#FF6384] rounded-full mr-2" />
+                    Mājoklis: €{(selectedReport?.housingSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#36A2EB] rounded-full mr-2" />
+                    Pārtika: €{(selectedReport?.foodSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#607D8B] rounded-full mr-2" />
+                    Transports: €{(selectedReport?.transportSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#4BC0C0] rounded-full mr-2" />
+                    Veselība / skaistumkopšana: €{(selectedReport?.healthSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#9966FF] rounded-full mr-2" />
+                    Bērni: €{(selectedReport?.childSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#FF9F40] rounded-full mr-2" />
+                    Iepirkšanās / pakalpojumi: €{(selectedReport?.shoppingSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#1E88E5] rounded-full mr-2" />
+                    Brīvais laiks / izklaide: €{(selectedReport?.leisureSpending ?? 0).toFixed(2)}
+                  </Card>
+                </div>
+                <div className="flex flex-col justify-between">
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#FF7043] rounded-full mr-2" />
+                    Izglītība: €{(selectedReport?.educationSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#922B21] rounded-full mr-2" />
+                    Atpūta: €{(selectedReport?.recreationSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#5C6BC0] rounded-full mr-2" />
+                    Apdrošināšana: €{(selectedReport?.insuranceSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#154360] rounded-full mr-2" />
+                    Ieguldījumi / uzkrājumi: €{(selectedReport?.investmentSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#81C784] rounded-full mr-2" />
+                    Mājdzīvnieki: €{(selectedReport?.petSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="flex flex-row p-2 mb-2">
+                    <Circle className="bg-[#B7950B] rounded-full mr-2" />
+                    Citi izdevumi: €{(selectedReport?.otherSpending ?? 0).toFixed(2)}
+                  </Card>
+                  <Card className="p-2 mb-2">Kopējie izdevumi: €{totalSpending.toFixed(2)}</Card>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-center">
+          <div className="flex flex-col mr-5 w-1/5">
+            <p className="flex justify-center text-lg mb-3">Jūs neesat izveidojis nevienu atskaiti</p>
+            <Button className="flex justify-center bg-black" onClick={() => router.push("/dashboard/new-budget-report")}>
+              Izveidot atskaiti
+            </Button>
+          </div>
+        </div>
+      )}
     </NavbarLayout>
   );
 };
 
 export default DashboardView;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const prisma = new PrismaClient();
+
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const financialRecords = await prisma.financialRecord.findMany({
+    where: { userId: session?.user.id },
+  });
+  console.log("this is session", session?.user.id);
+  console.log("this", financialRecords);
+  const filteredFinancialRecords = financialRecords.map(({ date, ...rest }) => rest);
+
+  return {
+    props: { financialReports: filteredFinancialRecords },
+  };
+}

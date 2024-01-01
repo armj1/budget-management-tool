@@ -4,27 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import FinancialRecord from "@/interfaces/FinancialRecord";
+import { PrismaClient } from "@prisma/client";
 import { Dot } from "lucide-react";
+import { GetServerSidePropsContext } from "next";
+import { getServerSession } from "next-auth";
 import Head from "next/head";
+import router from "next/router";
 import { useEffect, useState } from "react";
+import { authOptions } from "../api/auth/[...nextauth]";
 
-const BudgetRecommendations = () => {
-  const [financialReports, setFinancialReports] = useState<FinancialRecord[]>([]);
 
-  useEffect(() => {
-    const fetchFinancialReports = async () => {
-      try {
-        const response = await fetch("/api/getFinancialRecord");
-        if (response.ok) {
-          const data = await response.json();
-          setFinancialReports(data.financialRecords);
-        }
-      } catch (error) {
-        console.error("Error fetching financial reports:", error);
-      }
-    };
-    fetchFinancialReports();
-  }, []);
+interface BudgetRecommendationsProps{
+  financialReports: FinancialRecord[]
+}
+
+const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
 
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
 
@@ -152,16 +146,19 @@ const BudgetRecommendations = () => {
     setRecommendationExists(recommendations.isRecommendation);
   }, [recommendations.isRecommendation]);
 
+  const hasReports = props.financialReports.length > 0;
+
   return (
     <NavbarLayout currentPage="budgetRecommendations">
       <Head>
         <title>Budžeta rekomendācijas</title>
         <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
+        {hasReports ? (
       <div className="flex flex-col bg-slate-300 h-[calc(100vh-88px)]	p-10">
-        <div className="flex flex-row mb-5">
+      <div className="flex flex-row mb-5">
           <p className="flex flex-col justify-center font-medium ml-2 mr-3">Izvēlieties vienu no atskaitēm, lai saņemtu rekomendācijas</p>
-          <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
+          <DropdownReportsList financialReports={props.financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
         </div>
         <Card className="p-10">
           {!selectedReport && <p className="text-xl">Nav atskaites - nav padomu!</p>}
@@ -227,9 +224,34 @@ const BudgetRecommendations = () => {
           )}
           {!recommendationExists && selectedReport && <p className="text-xl">Atskaitei "{selectedReport?.title}" nav radušies ieteikumi</p>}
         </Card>
+        </div>) : (
+        <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-center">
+        <div className="flex flex-col mr-5 w-1/5">
+          <p className="flex justify-center text-lg mb-3">Jūs neesat izveidojis nevienu atskaiti</p>
+          <Button className="flex justify-center bg-black" onClick={() => router.push("/dashboard/new-budget-report")}>
+            Izveidot atskaiti
+          </Button>
+        </div>
       </div>
+        )}
     </NavbarLayout>
   );
 };
 
 export default BudgetRecommendations;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const prisma = new PrismaClient();
+
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const financialRecords = await prisma.financialRecord.findMany({
+    where: { userId: session?.user.id },
+  });
+
+  console.log(financialRecords);
+  const filteredFinancialRecords = financialRecords.map(({ date, ...rest }) => rest);
+
+  return {
+    props: { financialReports: filteredFinancialRecords },
+  };
+}

@@ -8,8 +8,16 @@ import { Input } from "@/components/ui/input";
 import router from "next/router";
 import { Label } from "@/components/ui/label";
 import DropdownReportsList from "@/components/dropdown-reports-list";
+import { PrismaClient } from "@prisma/client";
+import { GetServerSidePropsContext } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 
-const EditBudgetReport = () => {
+interface EditBudgetReportProps{
+  financialReports: FinancialRecord[]
+}
+
+const EditBudgetReport = (props: EditBudgetReportProps) => {
   const [formData, setFormData] = useState({
     id: "",
     title: "",
@@ -65,24 +73,9 @@ const EditBudgetReport = () => {
     setFormData({ ...formData, [e.target.name]: value });
   };
 
-  const [financialReports, setFinancialReports] = useState<FinancialRecord[]>([]);
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
 
-  console.log(financialReports);
-  useEffect(() => {
-    const fetchFinancialReports = async () => {
-      try {
-        const response = await fetch("/api/getFinancialRecord");
-        if (response.ok) {
-          const data = await response.json();
-          setFinancialReports(data.financialRecords);
-        }
-      } catch (error) {
-        console.error("Error fetching financial reports:", error);
-      }
-    };
-    fetchFinancialReports();
-  }, []);
+
 
   const handleReportSelect = (report: FinancialRecord) => {
     setSelectedReport(report);
@@ -145,8 +138,8 @@ const EditBudgetReport = () => {
         const data = await response.json();
         console.log("Financial record updated:", data.financialRecord);
         router.reload();
-      } 
-      
+      }
+
       if (formData.title.trim() === "") {
         setShowTitleError(true);
       } else {
@@ -323,234 +316,277 @@ const EditBudgetReport = () => {
     }
   };
 
+  const hasReports = props.financialReports.length > 0;
+
   return (
     <NavbarLayout currentPage="editBudgetReport">
       <Head>
         <title>Rediģēt budžeta atskaiti</title>
         <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
-      <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
-        <div className="flex flex-col mr-8">
-          <p className="text-lg pb-2">Pirms rediģēšanas, lūdzu, izvēlieties vajadzīgo atskaiti sarakstā</p>
-          <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport} />
+      {hasReports ? (
+        <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
+          <div className="flex flex-col mr-8">
+            <p className="text-lg pb-2">Pirms rediģēšanas, lūdzu, izvēlieties vajadzīgo atskaiti sarakstā</p>
+            <DropdownReportsList financialReports={props.financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport} />
+          </div>
+          <div>
+            <Card className="flex flex-col pr-10 pt-10 pl-10 pb-5">
+              <div className="flex flex-row pb-5">
+                <div className="flex flex-col pr-10">
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Atskaites nosaukums</Label>
+                    <Input placeholder="Atskaites nosaukums" value={formData.title} type="text" name="title" onChange={handleChange} />
+                    {showTitleError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Bruto ienākumi</Label>
+                    <Input
+                      placeholder="Bruto ienākumi"
+                      value={formData.totalIncome}
+                      type="number"
+                      min="0"
+                      name="totalIncome"
+                      onChange={handleChange}
+                    />
+                    {showTotalIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showTotalIncomeDecimalError && !showTotalIncomeEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Neto ienākumi</Label>
+                    <Input
+                      placeholder="Neto ienākumi"
+                      value={formData.taxedIncome}
+                      type="number"
+                      min="0"
+                      name="taxedIncome"
+                      onChange={handleChange}
+                    />
+                    {showTaxedIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showTaxedIncomeDecimalError && !showTaxedIncomeEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Mājokļa izdevumi</Label>
+                    <Input
+                      placeholder="Mājoklis"
+                      value={formData.housingSpending}
+                      type="number"
+                      min="0"
+                      name="housingSpending"
+                      onChange={handleChange}
+                    />
+                    {showHousingEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showHousingDecimalError && !showHousingEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col pr-10">
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Transporta izdevumi</Label>
+                    <Input
+                      placeholder="Transports"
+                      value={formData.transportSpending}
+                      type="number"
+                      min="0"
+                      name="transportSpending"
+                      onChange={handleChange}
+                    />
+                    {showTransportEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showTransportDecimalError && !showTransportEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Pārtikas izdevumi</Label>
+                    <Input placeholder="Pārtika" value={formData.foodSpending} type="number" min="0" name="foodSpending" onChange={handleChange} />
+                    {showFoodEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showFoodDecimalError && !showFoodEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Veselības / skaistumkopšanas izdevumi</Label>
+                    <Input
+                      className="mr-7"
+                      placeholder="Veselība / skaistumkopšana"
+                      value={formData.healthSpending}
+                      type="number"
+                      min="0"
+                      name="healthSpending"
+                      onChange={handleChange}
+                    />
+                    {showHealthEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showHealthDecimalError && !showHealthEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Bērnu izdevumi</Label>
+                    <Input placeholder="Bērni" value={formData.childSpending} type="number" min="0" name="childSpending" onChange={handleChange} />
+                    {showChildEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showChildDecimalError && !showChildEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col pr-10">
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Iepirkšanās / pakalpojumu izdevumi</Label>
+                    <Input
+                      className="mr-4"
+                      placeholder="Iepirkšanās / pakalpojumi"
+                      value={formData.shoppingSpending}
+                      type="number"
+                      min="0"
+                      name="shoppingSpending"
+                      onChange={handleChange}
+                    />
+                    {showShoppingEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showShoppingDecimalError && !showShoppingEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Brīvais laiks / izklaides izdevumi</Label>
+                    <Input
+                      placeholder="Brīvais laiks / izklaide"
+                      value={formData.leisureSpending}
+                      type="number"
+                      min="0"
+                      name="leisureSpending"
+                      onChange={handleChange}
+                    />
+                    {showLeisureEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showLeisureDecimalError && !showLeisureEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Izglītības izdevumi</Label>
+                    <Input
+                      placeholder="Izglītība"
+                      value={formData.educationSpending}
+                      type="number"
+                      min="0"
+                      name="educationSpending"
+                      onChange={handleChange}
+                    />
+                    {showEducationEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showEducationDecimalError && !showEducationEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Atpūtas izdevumi</Label>
+                    <Input
+                      placeholder="Atpūta"
+                      value={formData.recreationSpending}
+                      type="number"
+                      min="0"
+                      name="recreationSpending"
+                      onChange={handleChange}
+                    />
+                    {showRecreationEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showRecreationDecimalError && !showRecreationEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Apdrošināšanas izdevumi</Label>
+                    <Input
+                      placeholder="Apdrošināšana"
+                      value={formData.insuranceSpending}
+                      type="number"
+                      min="0"
+                      name="insuranceSpending"
+                      onChange={handleChange}
+                    />
+                    {showInsuranceEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showInsuranceDecimalError && !showInsuranceEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Ieguldījumu / uzkrājumu izdevumi</Label>
+                    <Input
+                      placeholder="Ieguldījumi / uzkrājumi"
+                      value={formData.investmentSpending}
+                      type="number"
+                      min="0"
+                      name="investmentSpending"
+                      onChange={handleChange}
+                    />
+                    {showInvestmentEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showInvestmentDecimalError && !showInvestmentEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Mājdzīvnieku izdevumi</Label>
+                    <Input placeholder="Mājdzīvnieki" value={formData.petSpending} type="number" min="0" name="petSpending" onChange={handleChange} />
+                    {showPetEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showPetDecimalError && !showPetEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <Label className="mb-2">Citi izdevumi</Label>
+                    <Input
+                      placeholder="Citi izdevumi"
+                      value={formData.otherSpending}
+                      type="number"
+                      min="0"
+                      name="otherSpending"
+                      onChange={handleChange}
+                    />
+                    {showOtherEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
+                    {showOtherDecimalError && !showOtherEmptyError && (
+                      <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <Button className="bg-black" onClick={handleUpdate}>
+                Iesniegt
+              </Button>
+            </Card>
+          </div>
         </div>
-        <div>
-          <Card className="flex flex-col pr-10 pt-10 pl-10 pb-5">
-            <div className="flex flex-row pb-5">
-              <div className="flex flex-col pr-10">
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Atskaites nosaukums</Label>
-                  <Input placeholder="Atskaites nosaukums" value={formData.title} type="text" name="title" onChange={handleChange} />
-                  {showTitleError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Bruto ienākumi</Label>
-                  <Input placeholder="Bruto ienākumi" value={formData.totalIncome} type="number" min="0" name="totalIncome" onChange={handleChange} />
-                  {showTotalIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showTotalIncomeDecimalError && !showTotalIncomeEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Neto ienākumi</Label>
-                  <Input placeholder="Neto ienākumi" value={formData.taxedIncome} type="number" min="0" name="taxedIncome" onChange={handleChange} />
-                  {showTaxedIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showTaxedIncomeDecimalError && !showTaxedIncomeEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Mājokļa izdevumi</Label>
-                  <Input
-                    placeholder="Mājoklis"
-                    value={formData.housingSpending}
-                    type="number"
-                    min="0"
-                    name="housingSpending"
-                    onChange={handleChange}
-                  />
-                  {showHousingEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showHousingDecimalError && !showHousingEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col pr-10">
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Transporta izdevumi</Label>
-                  <Input
-                    placeholder="Transports"
-                    value={formData.transportSpending}
-                    type="number"
-                    min="0"
-                    name="transportSpending"
-                    onChange={handleChange}
-                  />
-                  {showTransportEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showTransportDecimalError && !showTransportEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Pārtikas izdevumi</Label>
-                  <Input placeholder="Pārtika" value={formData.foodSpending} type="number" min="0" name="foodSpending" onChange={handleChange} />
-                  {showFoodEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showFoodDecimalError && !showFoodEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Veselības / skaistumkopšanas izdevumi</Label>
-                  <Input
-                    className="mr-7"
-                    placeholder="Veselība / skaistumkopšana"
-                    value={formData.healthSpending}
-                    type="number"
-                    min="0"
-                    name="healthSpending"
-                    onChange={handleChange}
-                  />
-                  {showHealthEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showHealthDecimalError && !showHealthEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Bērnu izdevumi</Label>
-                  <Input placeholder="Bērni" value={formData.childSpending} type="number" min="0" name="childSpending" onChange={handleChange} />
-                  {showChildEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showChildDecimalError && !showChildEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col pr-10">
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Iepirkšanās / pakalpojumu izdevumi</Label>
-                  <Input
-                    className="mr-4"
-                    placeholder="Iepirkšanās / pakalpojumi"
-                    value={formData.shoppingSpending}
-                    type="number"
-                    min="0"
-                    name="shoppingSpending"
-                    onChange={handleChange}
-                  />
-                  {showShoppingEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showShoppingDecimalError && !showShoppingEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Brīvais laiks / izklaides izdevumi</Label>
-                  <Input
-                    placeholder="Brīvais laiks / izklaide"
-                    value={formData.leisureSpending}
-                    type="number"
-                    min="0"
-                    name="leisureSpending"
-                    onChange={handleChange}
-                  />
-                  {showLeisureEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showLeisureDecimalError && !showLeisureEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Izglītības izdevumi</Label>
-                  <Input
-                    placeholder="Izglītība"
-                    value={formData.educationSpending}
-                    type="number"
-                    min="0"
-                    name="educationSpending"
-                    onChange={handleChange}
-                  />
-                  {showEducationEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showEducationDecimalError && !showEducationEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Atpūtas izdevumi</Label>
-                  <Input
-                    placeholder="Atpūta"
-                    value={formData.recreationSpending}
-                    type="number"
-                    min="0"
-                    name="recreationSpending"
-                    onChange={handleChange}
-                  />
-                  {showRecreationEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showRecreationDecimalError && !showRecreationEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Apdrošināšanas izdevumi</Label>
-                  <Input
-                    placeholder="Apdrošināšana"
-                    value={formData.insuranceSpending}
-                    type="number"
-                    min="0"
-                    name="insuranceSpending"
-                    onChange={handleChange}
-                  />
-                  {showInsuranceEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showInsuranceDecimalError && !showInsuranceEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Ieguldījumu / uzkrājumu izdevumi</Label>
-                  <Input
-                    placeholder="Ieguldījumi / uzkrājumi"
-                    value={formData.investmentSpending}
-                    type="number"
-                    min="0"
-                    name="investmentSpending"
-                    onChange={handleChange}
-                  />
-                  {showInvestmentEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showInvestmentDecimalError && !showInvestmentEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Mājdzīvnieku izdevumi</Label>
-                  <Input placeholder="Mājdzīvnieki" value={formData.petSpending} type="number" min="0" name="petSpending" onChange={handleChange} />
-                  {showPetEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showPetDecimalError && !showPetEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-                <div className="flex flex-col mb-2">
-                  <Label className="mb-2">Citi izdevumi</Label>
-                  <Input
-                    placeholder="Citi izdevumi"
-                    value={formData.otherSpending}
-                    type="number"
-                    min="0"
-                    name="otherSpending"
-                    onChange={handleChange}
-                  />
-                  {showOtherEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs</p>}
-                  {showOtherDecimalError && !showOtherEmptyError && (
-                    <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
-                  )}
-                </div>
-              </div>
-            </div>
-            <Button className="bg-black" onClick={handleUpdate}>
-              Iesniegt
+      ) : (
+        <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-center">
+          <div className="flex flex-col mr-5 w-1/5">
+            <p className="flex justify-center text-lg mb-3">Jūs neesat izveidojis nevienu atskaiti</p>
+            <Button className="flex justify-center bg-black" onClick={() => router.push("/dashboard/new-budget-report")}>
+              Izveidot atskaiti
             </Button>
-          </Card>
+          </div>
         </div>
-      </div>
+      )}
     </NavbarLayout>
   );
 };
 
 export default EditBudgetReport;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const prisma = new PrismaClient();
+
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const financialRecords = await prisma.financialRecord.findMany({
+    where: { userId: session?.user.id },
+  });
+
+  console.log(financialRecords);
+  const filteredFinancialRecords = financialRecords.map(({ date, ...rest }) => rest);
+
+  return {
+    props: { financialReports: filteredFinancialRecords },
+  };
+}

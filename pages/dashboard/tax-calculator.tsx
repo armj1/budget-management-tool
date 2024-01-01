@@ -5,34 +5,28 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FinancialRecord from "@/interfaces/FinancialRecord";
+import { PrismaClient } from "@prisma/client";
+import { GetServerSidePropsContext } from "next";
+import { getServerSession } from "next-auth";
 import Head from "next/head";
 import router from "next/router";
 import { useEffect, useState } from "react";
+import { authOptions } from "../api/auth/[...nextauth]";
 
-const TaxCalculator = () => {
+interface TaxCalculatorProps{
+  financialReports: FinancialRecord[]
+}
+
+const TaxCalculator = (props: TaxCalculatorProps) => {
   const [apgadajamoSkaits, setApgadajamoSkaits] = useState(0);
   const [isAlgasGramatinaChecked, setIsAlgasGramatinaChecked] = useState(false);
   const [isNeapliekamaisMinimumsChecked, setIsNeapliekamaisMinimumsChecked] = useState();
   const [preciseNeapliekamaisMinimums, setPreciseNeapliekamaisMinimums] = useState(0);
   const [additionalTaxCuts, setAdditionalTaxCuts] = useState(0);
-  const [financialReports, setFinancialReports] = useState<FinancialRecord[]>([]);
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
   const [isNetIncomeSame, setIsNetIncomeSame] = useState(true);
 
-  useEffect(() => {
-    const fetchFinancialReports = async () => {
-      try {
-        const response = await fetch("/api/getFinancialRecord");
-        if (response.ok) {
-          const data = await response.json();
-          setFinancialReports(data.financialRecords);
-        }
-      } catch (error) {
-        console.error("Error fetching financial reports:", error);
-      }
-    };
-    fetchFinancialReports();
-  }, []);
+
 
   const handleReportSelect = (report: FinancialRecord) => {
     setSelectedReport(report);
@@ -143,74 +137,111 @@ const TaxCalculator = () => {
     }
   };
 
+  console.log(props.financialReports)
+
+  const hasReports = props.financialReports.length > 0;
+
+
+
   return (
     <NavbarLayout currentPage="taxCalculator">
       <Head>
         <title>Nodokļu kalkulators</title>
         <link rel="icon" href="/circle-dollar-sign.svg" sizes="any" type="image/svg+xml"></link>
       </Head>
-      <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
-        <div className="flex flex-col shrink-0 pr-5">
-          <p className="text-lg">Balstoties uz atskaites datiem ir iespējams veikt nodokļu aprēķinu 2023.gadam</p>
-          <p className="pb-3">
-            Izvēlētā atskaite: <b>{selectedReport?.title}</b>
-          </p>
-          <div className="w-1/2">
-            <DropdownReportsList financialReports={financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
-          </div>
-        </div>
-        <div className="flex flex-row">
-          <div className="flex flex-col w-1/2">
-            <Card className="flex flex-col p-7 mr-5 h-3/5">
-              <div className="mb-3">
-                <Label>Apgādājamo skaits</Label>
-                <select className="mt-1 ml-2 p-2 outline outline-slate-200 outline-1 rounded" value={apgadajamoSkaits} onChange={handleApgadajamoSkaitsChange}>
-                  {numberOptions.map((number) => (
-                    <option key={number} value={number}>
-                      {number}
-                    </option>
-                  ))}
-                </select>
+      {hasReports ? (
+        <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
+            <div className="flex flex-col shrink-0 pr-5">
+              <p className="text-lg">Balstoties uz atskaites datiem ir iespējams veikt nodokļu aprēķinu 2023.gadam</p>
+              <p className="pb-3">
+                Izvēlētā atskaite: <b>{selectedReport?.title}</b>
+              </p>
+              <div className="w-1/2">
+                <DropdownReportsList financialReports={props.financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport} />
               </div>
-              <div className="mb-4">
-                <Label>Papildus nodokļu atvieglojumi</Label>
-                <Input className="mt-1" type="number" min="0" step="0.01" onChange={handleUserInput1Change} />
+            </div>
+            <div className="flex flex-row">
+              <div className="flex flex-col w-1/2">
+                <Card className="flex flex-col p-7 mr-5 h-3/5">
+                  <div className="mb-3">
+                    <Label>Apgādājamo skaits</Label>
+                    <select
+                      className="mt-1 ml-2 p-2 outline outline-slate-200 outline-1 rounded"
+                      value={apgadajamoSkaits}
+                      onChange={handleApgadajamoSkaitsChange}
+                    >
+                      {numberOptions.map((number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="mb-4">
+                    <Label>Papildus nodokļu atvieglojumi</Label>
+                    <Input className="mt-1" type="number" min="0" step="0.01" onChange={handleUserInput1Change} />
+                  </div>
+                  <div className="flex flex-row mb-4">
+                    <Label>Algas nodokļu grāmatiņa ir iesniegta</Label>
+                    <Input className="ml-2 h-4 w-4" type="checkbox" checked={isAlgasGramatinaChecked} onChange={handleCheckbox1Change} />
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex flex-row">
+                      <Label>Norādīt precīzu neapliekamo minimumu</Label>
+                      <Input className="ml-2 h-4 w-4" type="checkbox" checked={isNeapliekamaisMinimumsChecked} onChange={handleCheckbox2Change} />
+                    </div>
+                    {isNeapliekamaisMinimumsChecked && <Input className="mt-2" type="number" min="0" step="0.01" onChange={handleUserInput2Change} />}
+                  </div>
+                </Card>
+                {!isNetIncomeSame && (
+                  <Card className="p-7 mt-2 mr-5 mb-5">
+                    <p className="font-medium mb-1">Aprēķinātie neto ienākumi nesakrīt ar atskaites neto ienākumiem</p>
+                    <p>Atskaitē: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</p>
+                    <p>Aprēķinātie: €{result.netIncome.toFixed(2)}</p>
+                    <Button className="bg-black mt-2" onClick={handleUpdate}>
+                      Atjaunot datus
+                    </Button>
+                  </Card>
+                )}
               </div>
-              <div className="flex flex-row mb-4">
-                <Label>Algas nodokļu grāmatiņa ir iesniegta</Label>
-                <Input className="ml-2 h-4 w-4" type="checkbox" checked={isAlgasGramatinaChecked} onChange={handleCheckbox1Change} />
-              </div>
-              <div className="flex flex-col">
-                <div className="flex flex-row">
-                  <Label>Norādīt precīzu neapliekamo minimumu</Label>
-                  <Input className="ml-2 h-4 w-4" type="checkbox" checked={isNeapliekamaisMinimumsChecked} onChange={handleCheckbox2Change} />
-                </div>
-                {isNeapliekamaisMinimumsChecked && <Input className="mt-2" type="number" min="0" step="0.01" onChange={handleUserInput2Change} />}
-              </div>
-            </Card>
-            {!isNetIncomeSame && (
-              <Card className="p-7 mt-2 mr-5 mb-5">
-                <p className="font-medium mb-1">Aprēķinātie neto ienākumi nesakrīt ar atskaites neto ienākumiem</p>
-                <p>Atskaitē: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</p>
-                <p>Aprēķinātie: €{(result.netIncome).toFixed(2)}</p>
-                <Button className="bg-black mt-2" onClick={handleUpdate}>
-                  Atjaunot datus
-                </Button>
+              <Card className="flex flex-col justify-around p-10">
+                <Card className="p-2">Bruto ienākumi: €{(selectedReport?.totalIncome ?? 0).toFixed(2)}</Card>
+                <Card className="p-2">Piemērojamais neapliekamais minimums: €{result.untaxedMinimum.toFixed(2)}</Card>
+                <Card className="p-2">Atvieglojums par apgādībā esošām personām: €{result.taxCuts.toFixed(2)}</Card>
+                <Card className="p-2">Valsts sociālās apdrošināšanas obligātās iemaksas: €{result.vsaoi.toFixed(2)}</Card>
+                <Card className="p-2">Iedzīvotāju ienākumu nodoklis: €{result.incomeTax.toFixed(2)}</Card>
+                <Card className="p-2">Aprēķinātie neto ienākumi: €{result.netIncome.toFixed(2)}</Card>
               </Card>
-            )}
-          </div>
-          <Card className="flex flex-col justify-around p-10">
-            <Card className="p-2">Bruto ienākumi: €{(selectedReport?.totalIncome ?? 0).toFixed(2)}</Card>
-            <Card className="p-2">Piemērojamais neapliekamais minimums: €{(result.untaxedMinimum).toFixed(2)}</Card>
-            <Card className="p-2">Atvieglojums par apgādībā esošām personām: €{(result.taxCuts).toFixed(2)}</Card>
-            <Card className="p-2">Valsts sociālās apdrošināšanas obligātās iemaksas: €{(result.vsaoi).toFixed(2)}</Card>
-            <Card className="p-2">Iedzīvotāju ienākumu nodoklis: €{(result.incomeTax).toFixed(2)}</Card>
-            <Card className="p-2">Aprēķinātie neto ienākumi: €{(result.netIncome).toFixed(2)}</Card>
-          </Card>
+            </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-center">
+          <div className="flex flex-col mr-5 w-1/5">
+            <p className="flex justify-center text-lg mb-3">Jūs neesat izveidojis nevienu atskaiti</p>
+            <Button className="flex justify-center bg-black" onClick={() => router.push("/dashboard/new-budget-report")}>
+              Izveidot atskaiti
+            </Button>
+          </div>
+        </div>
+      )}
     </NavbarLayout>
   );
 };
 
 export default TaxCalculator;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const prisma = new PrismaClient();
+
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const financialRecords = await prisma.financialRecord.findMany({
+    where: { userId: session?.user.id },
+  });
+
+  console.log(financialRecords);
+  const filteredFinancialRecords = financialRecords.map(({ date, ...rest }) => rest);
+
+  return {
+    props: { financialReports: filteredFinancialRecords },
+  };
+}

@@ -16,17 +16,27 @@ const Dashboard = (data: any) => {
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const prisma = new PrismaClient();
+
   const session = await getServerSession(context.req, context.res, authOptions);
+
+  const financialRecords = await prisma.financialRecord.findMany({
+    where: { userId: session?.user.id },
+  });
+
+  const filteredFinancialRecords = financialRecords.map(({ date, ...rest }) => rest);
 
   const userData = await prisma.user.findUnique({
     where: { id: session?.user.id },
   });
+  
   return {
     props: {
       firstName: userData?.firstName,
       lastName: userData?.lastName,
       email: userData?.email,
       newUser: userData?.newUser,
+      financialReports: filteredFinancialRecords
     },
   };
 }
