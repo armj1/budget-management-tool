@@ -22,6 +22,7 @@ const MyProfile = (data: any) => {
   const [showFirstNameError, setShowFirstNameError] = useState(false);
   const [showLastNameError, setShowLastNameError] = useState(false);
   const [showEmailError, setShowEmailError] = useState(false);
+  const [showUniqueEmailError, setShowUniqueEmailError] = useState(false);
   const [showPasswordLengthError, setShowPasswordLengthError] = useState(false);
   const [showPasswordMatchError, setShowPasswordMatchError] = useState(false);
 
@@ -68,6 +69,13 @@ const MyProfile = (data: any) => {
       } else {
         setShowEmailError(false);
       }
+
+      if (response.status === 400) {
+        setShowUniqueEmailError(true);
+      } else {
+        setShowUniqueEmailError(false);
+      }
+
       if (formData.password.length < 8) {
         setShowPasswordLengthError(true);
       } else {
@@ -125,6 +133,7 @@ const MyProfile = (data: any) => {
             <Label>E-pasts</Label>
             <Input placeholder={data.email} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
             {showEmailError && <p className="flex text-red-600 justify-center text-sm">Nepareizs e-pasta formats</p>}
+            {showUniqueEmailError && <p className="flex text-red-600 justify-center text-sm">E-pasts ir jau reģistrēts</p>}
           </div>
           <Separator />
           <p className="flex font-medium justify-end">Ievadiet esošu vai jaunu paroli</p>

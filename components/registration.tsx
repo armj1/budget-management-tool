@@ -12,6 +12,7 @@ const RegistrationCard = (props: RegistrationProps) => {
   const [showFirstNameError, setShowFirstNameError] = useState(false);
   const [showLastNameError, setShowLastNameError] = useState(false);
   const [showEmailError, setShowEmailError] = useState(false);
+  const [showUniqueEmailError, setShowUniqueEmailError] = useState(false);
   const [showPasswordLengthError, setShowPasswordLengthError] = useState(false);
   const [showPasswordMatchError, setShowPasswordMatchError] = useState(false);
 
@@ -61,6 +62,12 @@ const RegistrationCard = (props: RegistrationProps) => {
         setShowEmailError(false);
       }
 
+      if (response.status === 400) {
+        setShowUniqueEmailError(true);
+      } else {
+        setShowUniqueEmailError(false);
+      }
+
       if (formData.password.length < 8) {
         setShowPasswordLengthError(true);
       } else {
@@ -100,13 +107,21 @@ const RegistrationCard = (props: RegistrationProps) => {
         <div className="flex flex-col mb-3 w-3/4">
           <Input type="email" placeholder="E-pasts" name="email" value={formData.email} onChange={handleChange} required />
           {showEmailError && <p className="flex text-red-600 justify-center text-sm">Nepareizs e-pasta formats</p>}
+          {showUniqueEmailError && <p className="flex text-red-600 justify-center text-sm">E-pasts ir jau reģistrēts</p>}
         </div>
         <div className="mb-3 w-3/4">
           <Input type="password" placeholder="Parole" name="password" value={formData.password} onChange={handleChange} required />
           {showPasswordLengthError && <p className="flex text-red-600 justify-center text-sm">Parolei jābūt vismaz 8 simbolus garai</p>}
         </div>
         <div className="mb-3 w-3/4">
-          <Input type="password" placeholder="Atkārtot paroli" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+          <Input
+            type="password"
+            placeholder="Atkārtot paroli"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
           {showPasswordMatchError && <p className="flex text-red-600 justify-center text-sm">Ievadītās paroles nesakrīt</p>}
         </div>
         <Button className="text-base mb-6 bg-black w-1/2" onClick={onRegistration}>

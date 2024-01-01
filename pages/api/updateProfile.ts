@@ -47,9 +47,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       res.status(200).json({ user: updateUser });
-    } catch (error) {
-      console.error("Error updating user:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    } catch (error: any) {
+      if (error.code === "P2002" && error.meta?.target === "user_email_key") {
+        res.status(400).json({ message: "Email is already in use." });
+      } else {
+        console.error("Error updating user:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
     } finally {
       await prisma.$disconnect();
     }
