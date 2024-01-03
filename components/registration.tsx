@@ -106,7 +106,7 @@ const RegistrationCard = (props: RegistrationProps) => {
         </div>
         <div className="flex flex-col mb-3 w-3/4">
           <Input type="email" placeholder="E-pasts" name="email" value={formData.email} onChange={handleChange} required />
-          {showEmailError && <p className="flex text-red-600 justify-center text-sm">Nepareizs e-pasta formats</p>}
+          {showEmailError && <p className="flex text-red-600 justify-center text-sm">Nepareizs e-pasta formāts</p>}
           {showUniqueEmailError && <p className="flex text-red-600 justify-center text-sm">E-pasts ir jau reģistrēts</p>}
         </div>
         <div className="mb-3 w-3/4">

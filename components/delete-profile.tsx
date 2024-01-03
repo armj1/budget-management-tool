@@ -5,14 +5,11 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { X } from "lucide-react";
 import { PrismaClient } from "@prisma/client";
-import { compare } from "bcrypt";
 
 interface DeleteFormProps {
   onClose: () => void;
   password: string;
 }
-
-const prisma = new PrismaClient();
 
 const DeleteProfileForm = (props: DeleteFormProps) => {
   const router = useRouter();
@@ -20,6 +17,8 @@ const DeleteProfileForm = (props: DeleteFormProps) => {
   const [formData, setFormData] = useState({
     password: "",
   });
+
+  const [showPasswordError, setShowPasswordError] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -31,9 +30,10 @@ const DeleteProfileForm = (props: DeleteFormProps) => {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
+        setShowPasswordError(false);
         router.push("/");
       } else if (response.status === 500) {
-        alert("Ievadītā parole nav pareiza!");
+        setShowPasswordError(true);
       }
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -46,14 +46,16 @@ const DeleteProfileForm = (props: DeleteFormProps) => {
         <X className="h-5 w-5" />
       </Button>
       <div className="flex flex-col pl-7 pr-7 pb-7">
-        <p className="font-medium mb-3">Lūdzu ievadiet paroli, lai apstiprinātu profila izdzēšanu</p>
-        <Input
-          type="password"
-          className="mb-3"
-          placeholder="Parole"
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-        />
+        <div className="mb-3">
+          <p className="font-medium mb-3">Lūdzu ievadiet paroli, lai apstiprinātu profila izdzēšanu</p>
+          <Input
+            type="password"
+            placeholder="Parole"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          />
+          {showPasswordError && <p className="flex text-red-600 justify-center text-sm mt-2">Ievadītā parole nav pareiza</p>}
+        </div>
         <Button className="flex justify-center" variant="destructive" onClick={handleDelete}>
           Apstiprināt izdzēšanu
         </Button>
