@@ -13,8 +13,8 @@ import { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 
-interface EditBudgetReportProps{
-  financialReports: FinancialRecord[]
+interface EditBudgetReportProps {
+  financialReports: FinancialRecord[];
 }
 
 const EditBudgetReport = (props: EditBudgetReportProps) => {
@@ -42,6 +42,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
   const [showTotalIncomeDecimalError, setShowTotalIncomeDecimalError] = useState(false);
   const [showTaxedIncomeEmptyError, setShowTaxedIncomeEmptyError] = useState(false);
   const [showTaxedIncomeDecimalError, setShowTaxedIncomeDecimalError] = useState(false);
+  const [showTaxedvsTotalError, setShowTaxedvsTotalError] = useState(false);
   const [showHousingEmptyError, setShowHousingEmptyError] = useState(false);
   const [showHousingDecimalError, setShowHousingDecimalError] = useState(false);
   const [showTransportEmptyError, setShowTransportEmptyError] = useState(false);
@@ -74,8 +75,6 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
   };
 
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
-
-
 
   const handleReportSelect = (report: FinancialRecord) => {
     setSelectedReport(report);
@@ -167,6 +166,11 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
         setShowTaxedIncomeDecimalError(true);
       } else {
         setShowTaxedIncomeDecimalError(false);
+      }
+      if (formData.taxedIncome > formData.totalIncome) {
+        setShowTaxedvsTotalError(true);
+      } else {
+        setShowTaxedvsTotalError(false);
       }
 
       if (formData.housingSpending === "" || formData.housingSpending === null || formData.housingSpending === undefined) {
@@ -367,6 +371,9 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
                     {showTaxedIncomeEmptyError && <p className="flex text-red-600 justify-center text-sm">Lauks nevar būt tukšs vai 0</p>}
                     {showTaxedIncomeDecimalError && !showTaxedIncomeEmptyError && (
                       <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
+                    )}
+                    {showTaxedvsTotalError && (
+                      <p className="flex text-red-600 justify-center text-sm">Neto ienākumi nedrīkst pārsniegt bruto ienākumus</p>
                     )}
                   </div>
                   <div className="flex flex-col mb-2">

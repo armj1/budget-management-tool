@@ -32,6 +32,7 @@ const BudgetNewReportCard = () => {
   const [showTotalIncomeDecimalError, setShowTotalIncomeDecimalError] = useState(false);
   const [showTaxedIncomeEmptyError, setShowTaxedIncomeEmptyError] = useState(false);
   const [showTaxedIncomeDecimalError, setShowTaxedIncomeDecimalError] = useState(false);
+  const [showTaxedvsTotalError, setShowTaxedvsTotalError] = useState(false);
   const [showHousingEmptyError, setShowHousingEmptyError] = useState(false);
   const [showHousingDecimalError, setShowHousingDecimalError] = useState(false);
   const [showTransportEmptyError, setShowTransportEmptyError] = useState(false);
@@ -107,6 +108,11 @@ const BudgetNewReportCard = () => {
         setShowTaxedIncomeDecimalError(true);
       } else {
         setShowTaxedIncomeDecimalError(false);
+      }
+      if (formData.taxedIncome > formData.totalIncome) {
+        setShowTaxedvsTotalError(true);
+      } else {
+        setShowTaxedvsTotalError(false);
       }
 
       if (formData.housingSpending === "" || formData.housingSpending === null || formData.housingSpending === undefined) {
@@ -280,6 +286,7 @@ const BudgetNewReportCard = () => {
             {showTaxedIncomeDecimalError && !showTaxedIncomeEmptyError && (
               <p className="flex text-red-600 justify-center text-sm">Ne vairāk par 2 cipariem aiz komata</p>
             )}
+            {showTaxedvsTotalError && <p className="flex text-red-600 justify-center text-sm">Neto ienākumi nedrīkst pārsniegt bruto ienākumus</p>}
           </div>
           <div className="flex flex-col mb-2">
             <Label className="mb-2">Mājokļa izdevumi</Label>
@@ -317,7 +324,7 @@ const BudgetNewReportCard = () => {
           <div className="flex flex-col mb-2">
             <Label className="mb-2">Veselības / skaistumkopšanas izdevumi</Label>
             <Input
-            className="mr-7"
+              className="mr-7"
               placeholder="Veselība / skaistumkopšana"
               value={formData.healthSpending}
               type="number"
@@ -343,7 +350,7 @@ const BudgetNewReportCard = () => {
           <div className="flex flex-col mb-2">
             <Label className="mb-2">Iepirkšanās / pakalpojumu izdevumi</Label>
             <Input
-            className="mr-4"
+              className="mr-4"
               placeholder="Iepirkšanās / pakalpojumi"
               value={formData.shoppingSpending}
               type="number"
