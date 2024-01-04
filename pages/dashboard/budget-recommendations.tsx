@@ -43,9 +43,7 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
 
   const leftoverMoney = Math.max(parseFloat(((selectedReport?.taxedIncome ?? 0) - totalSpending).toFixed(2)), 0);
 
-  const [recommendationExists, setRecommendationExists] = useState(true);
   const recommendationCalculations = () => {
-    let isRecommendation = true;
     let recommendedHousing = 0;
     let recommendedSavings = 0;
     let recommendedFood = 0;
@@ -63,64 +61,51 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
     let openHealth = false;
     let openLeisure = false;
     const netIncome = selectedReport?.taxedIncome ?? 0;
-    let anyConditionMet = false;
 
     if ((selectedReport?.housingSpending ?? 0) > netIncome * 0.3) {
       recommendedHousing = Math.round(netIncome * 0.3 * 100) / 100;
       openHousingRecomm = true;
-      anyConditionMet = true;
     }
 
     if ((selectedReport?.investmentSpending ?? 0) < netIncome * 0.15) {
       recommendedSavings = Math.round(netIncome * 0.15 * 100) / 100;
       openSavingsRecomm = true;
-      anyConditionMet = true;
     }
 
     if (leftoverMoney == 0) {
       openLeftoverZero = true;
-      anyConditionMet = true;
     } else if (leftoverMoney > 0) {
       openLeftover = true;
-      anyConditionMet = true;
     }
 
     if ((selectedReport?.foodSpending ?? 0) > netIncome * 0.15) {
       recommendedFood = Math.round(netIncome * 0.15 * 100) / 100;
       openFood = true;
-      anyConditionMet = true;
     }
 
     if ((selectedReport?.insuranceSpending ?? 0) > netIncome * 0.25) {
       recommendedInsurance = Math.round(netIncome * 0.25 * 100) / 100;
       openInsurance = true;
-      anyConditionMet = true;
     }
 
     if ((selectedReport?.transportSpending ?? 0) > netIncome * 0.15) {
       recommendedTransport = Math.round(netIncome * 0.15 * 100) / 100;
       openTransport = true;
-      anyConditionMet = true;
     }
 
     if ((selectedReport?.healthSpending ?? 0) > netIncome * 0.1) {
       recommendedHealth = Math.round(netIncome * 0.1 * 100) / 100;
       openHealth = true;
-      anyConditionMet = true;
     }
 
     if ((selectedReport?.leisureSpending ?? 0) > netIncome * 0.1) {
       recommendedLeisure = Math.round(netIncome * 0.1 * 100) / 100;
       openLeisure = true;
-      anyConditionMet = true;
     }
 
-    if (!anyConditionMet) {
-      isRecommendation = false;
-    }
+
 
     return {
-      isRecommendation: isRecommendation,
       housing: recommendedHousing,
       savings: recommendedSavings,
       food: recommendedFood,
@@ -142,9 +127,7 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
 
   const recommendations = recommendationCalculations();
 
-  useEffect(() => {
-    setRecommendationExists(recommendations.isRecommendation);
-  }, [recommendations.isRecommendation]);
+
 
   const hasReports = props.financialReports.length > 0;
 
@@ -161,8 +144,8 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
           <DropdownReportsList financialReports={props.financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport}/>
         </div>
         <Card className="p-10">
-          {!selectedReport && <p className="text-xl">Nav atskaites - nav padomu!</p>}
-          {selectedReport && recommendationExists && (
+          {!selectedReport && <p className="text-xl">Neizvēloties atskaiti, nav iespējams sniegt rekomendācijas</p>}
+          {selectedReport && (
             <div className="flex flex-col">
               <p className="text-xl mb-2">Balstoties uz atskaites "{selectedReport?.title}" datiem mums ir radušies šādi ieteikumi:</p>
               {recommendations.openHousingRecomm && (
@@ -222,7 +205,6 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
               )}
             </div>
           )}
-          {!recommendationExists && selectedReport && <p className="text-xl">Atskaitei "{selectedReport?.title}" nav radušies ieteikumi</p>}
         </Card>
         </div>) : (
         <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-center">
