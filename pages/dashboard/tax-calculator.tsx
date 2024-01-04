@@ -13,8 +13,8 @@ import router from "next/router";
 import { useEffect, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 
-interface TaxCalculatorProps{
-  financialReports: FinancialRecord[]
+interface TaxCalculatorProps {
+  financialReports: FinancialRecord[];
 }
 
 const TaxCalculator = (props: TaxCalculatorProps) => {
@@ -25,8 +25,6 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
   const [additionalTaxCuts, setAdditionalTaxCuts] = useState(0);
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
   const [isNetIncomeSame, setIsNetIncomeSame] = useState(true);
-
-
 
   const handleReportSelect = (report: FinancialRecord) => {
     setSelectedReport(report);
@@ -128,7 +126,7 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
       if (response.ok) {
         const data = await response.json();
         router.reload();
-      } else if (response.status === 400 || 500) {
+      } else {
         const errorData = await response.json();
         console.error("Update failed. Server response:", errorData);
       }
@@ -137,11 +135,9 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
     }
   };
 
-  console.log(props.financialReports)
+  console.log(props.financialReports);
 
   const hasReports = props.financialReports.length > 0;
-
-
 
   return (
     <NavbarLayout currentPage="taxCalculator">
@@ -151,68 +147,69 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
       </Head>
       {hasReports ? (
         <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-between">
-            <div className="flex flex-col shrink-0 pr-5">
-              <p className="text-lg">Balstoties uz atskaites datiem ir iespējams veikt nodokļu aprēķinu 2023.gadam</p>
-              <p className="pb-3">
-                Izvēlētā atskaite: <b>{selectedReport?.title}</b>
-              </p>
-              <div className="w-1/2">
-                <DropdownReportsList financialReports={props.financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport} />
-              </div>
+          <div className="flex flex-col shrink-0 pr-5">
+            <p className="text-lg">Balstoties uz atskaites datiem ir iespējams veikt nodokļu aprēķinu 2023.gadam</p>
+            <p className="pb-3">
+              Izvēlētā atskaite: <b>{selectedReport?.title}</b>
+            </p>
+            <div className="w-1/2">
+              <DropdownReportsList financialReports={props.financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport} />
             </div>
-            <div className="flex flex-row">
-              <div className="flex flex-col w-1/2">
-                <Card className="flex flex-col p-7 mr-5 h-3/5">
-                  <div className="mb-3">
-                    <Label>Apgādājamo skaits</Label>
-                    <select
-                      className="mt-1 ml-2 p-2 outline outline-slate-200 outline-1 rounded"
-                      value={apgadajamoSkaits}
-                      onChange={handleApgadajamoSkaitsChange}
-                    >
-                      {numberOptions.map((number) => (
-                        <option key={number} value={number}>
-                          {number}
-                        </option>
-                      ))}
-                    </select>
+          </div>
+          <div className="flex flex-row">
+            <div className="flex flex-col w-1/2">
+              <Card className="flex flex-col p-7 mr-5 h-3/5">
+                <div className="mb-3">
+                  <Label>Apgādājamo skaits</Label>
+                  <select
+                    className="mt-1 ml-2 p-2 outline outline-slate-200 outline-1 rounded"
+                    value={apgadajamoSkaits}
+                    onChange={handleApgadajamoSkaitsChange}
+                  >
+                    {numberOptions.map((number) => (
+                      <option key={number} value={number}>
+                        {number}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <Label>Papildus nodokļu atvieglojumi</Label>
+                  <Input className="mt-1" type="number" min="0" step="0.01" onChange={handleUserInput1Change} />
+                </div>
+                <div className="flex flex-row mb-4">
+                  <Label>Algas nodokļu grāmatiņa ir iesniegta</Label>
+                  <Input className="ml-2 h-4 w-4" type="checkbox" checked={isAlgasGramatinaChecked} onChange={handleCheckbox1Change} />
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex flex-row">
+                    <Label>Norādīt precīzu neapliekamo minimumu</Label>
+                    <Input className="ml-2 h-4 w-4" type="checkbox" checked={isNeapliekamaisMinimumsChecked} onChange={handleCheckbox2Change} />
                   </div>
-                  <div className="mb-4">
-                    <Label>Papildus nodokļu atvieglojumi</Label>
-                    <Input className="mt-1" type="number" min="0" step="0.01" onChange={handleUserInput1Change} />
-                  </div>
-                  <div className="flex flex-row mb-4">
-                    <Label>Algas nodokļu grāmatiņa ir iesniegta</Label>
-                    <Input className="ml-2 h-4 w-4" type="checkbox" checked={isAlgasGramatinaChecked} onChange={handleCheckbox1Change} />
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="flex flex-row">
-                      <Label>Norādīt precīzu neapliekamo minimumu</Label>
-                      <Input className="ml-2 h-4 w-4" type="checkbox" checked={isNeapliekamaisMinimumsChecked} onChange={handleCheckbox2Change} />
-                    </div>
-                    {isNeapliekamaisMinimumsChecked && <Input className="mt-2" type="number" min="0" step="0.01" onChange={handleUserInput2Change} />}
-                  </div>
-                </Card>
-                {!isNetIncomeSame && (
-                  <Card className="p-7 mt-2 mr-5 mb-5">
-                    <p className="font-medium mb-1">Aprēķinātie neto ienākumi nesakrīt ar atskaites neto ienākumiem</p>
-                    <p>Atskaitē: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</p>
-                    <p>Aprēķinātie: €{result.netIncome.toFixed(2)}</p>
-                    <Button className="bg-black mt-2" onClick={handleUpdate}>
-                      Atjaunināt datus
-                    </Button>
-                  </Card>
-                )}
-              </div>
-              <Card className="flex flex-col justify-around p-10">
-                <Card className="p-2">Bruto ienākumi: €{(selectedReport?.totalIncome ?? 0).toFixed(2)}</Card>
-                <Card className="p-2">Piemērojamais neapliekamais minimums: €{result.untaxedMinimum.toFixed(2)}</Card>
-                <Card className="p-2">Atvieglojums par apgādībā esošām personām: €{result.taxCuts.toFixed(2)}</Card>
-                <Card className="p-2">Valsts sociālās apdrošināšanas obligātās iemaksas: €{result.vsaoi.toFixed(2)}</Card>
-                <Card className="p-2">Iedzīvotāju ienākumu nodoklis: €{result.incomeTax.toFixed(2)}</Card>
-                <Card className="p-2">Aprēķinātie neto ienākumi: €{result.netIncome.toFixed(2)}</Card>
+                  {isNeapliekamaisMinimumsChecked && <Input className="mt-2" type="number" min="0" step="0.01" onChange={handleUserInput2Change} />}
+                </div>
               </Card>
+              {!isNetIncomeSame && (
+                <Card className="p-7 mt-2 mr-5 mb-5">
+                  <p className="font-medium mb-1">Aprēķinātie neto ienākumi nesakrīt ar atskaites neto ienākumiem</p>
+                  <p>Atskaitē: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</p>
+                  <p>Aprēķinātie: €{result.netIncome.toFixed(2)}</p>
+                  {result.netIncome <= 0 && <p className="flex text-red-600 justify-center text-sm">Aprēķinātie dati nav korekti</p>}
+                  <Button className="bg-black mt-2" onClick={handleUpdate}>
+                    Atjaunināt datus
+                  </Button>
+                </Card>
+              )}
             </div>
+            <Card className="flex flex-col justify-around p-10">
+              <Card className="p-2">Bruto ienākumi: €{(selectedReport?.totalIncome ?? 0).toFixed(2)}</Card>
+              <Card className="p-2">Piemērojamais neapliekamais minimums: €{result.untaxedMinimum.toFixed(2)}</Card>
+              <Card className="p-2">Atvieglojums par apgādībā esošām personām: €{result.taxCuts.toFixed(2)}</Card>
+              <Card className="p-2">Valsts sociālās apdrošināšanas obligātās iemaksas: €{result.vsaoi.toFixed(2)}</Card>
+              <Card className="p-2">Iedzīvotāju ienākumu nodoklis: €{result.incomeTax.toFixed(2)}</Card>
+              <Card className="p-2">Aprēķinātie neto ienākumi: €{result.netIncome.toFixed(2)}</Card>
+            </Card>
+          </div>
         </div>
       ) : (
         <div className="flex flex-row bg-slate-300 h-[calc(100vh-88px)]	p-10 justify-center">
