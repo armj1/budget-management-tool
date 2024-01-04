@@ -80,12 +80,10 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
     if (income * 12 <= 20004) {
       incomeTax = Math.max((income - vsaoi - untaxedMinimum - taxCuts - additionalTaxCutsValue) * 0.2, 0);
       incomeTax = Math.round(incomeTax * 100) / 100;
-    } else if (income * 12 <= 78100) {
-      incomeTax = Math.max((income - vsaoi - untaxedMinimum - taxCuts - additionalTaxCutsValue) * 0.23, 0);
-      incomeTax = Math.round(incomeTax * 100) / 100;
-    } else if (income * 12 > 78100) {
-      incomeTax = Math.max((income - vsaoi - untaxedMinimum - taxCuts - additionalTaxCutsValue) * 0.3, 0);
-      incomeTax = Math.round(incomeTax * 100) / 100;
+    } else  {
+      const income20perc = Math.max((1667 - vsaoi - untaxedMinimum - taxCuts - additionalTaxCutsValue) * 0.2, 0);
+      const income23perc = Math.max((income - 1667) * 0.23, 0);
+      incomeTax = Math.round((income20perc + income23perc) * 100) / 100;
     }
 
     const netIncome = Math.round((income - vsaoi - incomeTax) * 100) / 100;
