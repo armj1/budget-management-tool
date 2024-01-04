@@ -199,7 +199,7 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
                     <p>Atskaitē: €{(selectedReport?.taxedIncome ?? 0).toFixed(2)}</p>
                     <p>Aprēķinātie: €{result.netIncome.toFixed(2)}</p>
                     <Button className="bg-black mt-2" onClick={handleUpdate}>
-                      Atjaunot datus
+                      Atjaunināt datus
                     </Button>
                   </Card>
                 )}

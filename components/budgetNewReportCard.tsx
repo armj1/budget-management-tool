@@ -357,7 +357,7 @@ const BudgetNewReportCard = () => {
             )}
           </div>
           <div className="flex flex-col mb-2">
-            <Label className="mb-2">Brīvais laiks / izklaides izdevumi</Label>
+            <Label className="mb-2">Brīvā laika / izklaides izdevumi</Label>
             <Input
               placeholder="Brīvais laiks / izklaide"
               value={formData.leisureSpending}
