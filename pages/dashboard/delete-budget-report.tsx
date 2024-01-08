@@ -6,13 +6,15 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import Head from "next/head";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next";
 
+// Parametru datu tipa definēšana
 interface DeleteBudgetReportProps{
   financialReports: FinancialRecord[]
 }
+
 const DeleteBudgetReport = (props: DeleteBudgetReportProps) => {
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
 
@@ -20,6 +22,7 @@ const DeleteBudgetReport = (props: DeleteBudgetReportProps) => {
     setSelectedReport(report);
   };
 
+  // Ievaddatu nodošana API izsaukumam atskaites dzēšanai
   const handleDelete = async () => {
     try {
       const response = await fetch("/api/deleteReport", {
@@ -57,7 +60,6 @@ const DeleteBudgetReport = (props: DeleteBudgetReportProps) => {
             </p>
             <DropdownReportsList financialReports={props.financialReports} onSelectReport={handleReportSelect} selectedReport={selectedReport} />
           </div>
-
           <Button variant="destructive" onClick={handleDelete}>
             Izdzēst atskaiti
           </Button>
@@ -78,6 +80,9 @@ const DeleteBudgetReport = (props: DeleteBudgetReportProps) => {
 
 export default DeleteBudgetReport;
 
+// Funkcija, kas ļauj iegūt atskaišu datus un tad ar tiem ielādēt atvērto skatu,
+// kas ļauj izvairīties no tā, ka lietotājam bez atskaitēm uz mirkli būs redzams 
+// ne "lietotājs bez atskaitēm" skats 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const prisma = new PrismaClient();
 

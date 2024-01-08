@@ -1,9 +1,10 @@
 import User from "./User";
 
+// Datu tipu definēšana budžeta atskaites datiem (ne datu bāzē)
 interface FinancialRecord {
   id: string;
   userId: string;
-  user: User; // Assuming you have a User interface or type defined
+  user: User;  // Atsauce uz lietotāja datu shēmu
   date: Date;
   title: string;
   totalIncome: number;

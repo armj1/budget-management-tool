@@ -179,8 +179,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const financialRecords = await prisma.financialRecord.findMany({
     where: { userId: session?.user.id },
   });
-  console.log("this is session", session?.user.id);
-  console.log("this", financialRecords);
   const filteredFinancialRecords = financialRecords.map(({ date, ...rest }) => rest);
 
   return {

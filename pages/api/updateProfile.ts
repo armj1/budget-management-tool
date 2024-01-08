@@ -7,6 +7,7 @@ import { authOptions } from "./auth/[...nextauth]";
 
 const prisma = new PrismaClient();
 
+// Shēma lietotāju datu validācijai
 const userUpdateSchema = z
   .object({
     firstName: z.string().min(1),
@@ -29,9 +30,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const session = await getServerSession(req, res, authOptions);
 
   if (req.method === "PUT") {
+    // Ievaddatu salīdzināšana ar datu shēmu
     const { firstName, lastName, email, password } = userUpdateSchema.parse(req.body);
 
     try {
+      // Paroles šifrēšana
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const updateUser = await prisma.user.update({
@@ -48,6 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json({ user: updateUser });
     } catch (error: any) {
+      // Tiek izmantots, lai spētu aktivizēt kļūdas paziņojumu saistītu ar jau reģistrētu e-pastu
       if (error.code === "P2002" && error.meta?.target === "user_email_key") {
         res.status(400).json({ message: "Email is already in use." });
       } else {

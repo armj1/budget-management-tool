@@ -2,8 +2,9 @@ import { signOut } from "next-auth/react";
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import Link from "next/link";
-import { ArrowRightLeft, Calculator, CircleDollarSign, ClipboardEdit, CreditCard, Home, Lightbulb, PlusCircle, Trash2, UserCircle2 } from "lucide-react";
+import { ArrowRightLeft, Calculator, CircleDollarSign, ClipboardEdit, Home, Lightbulb, PlusCircle, Trash2, UserCircle2 } from "lucide-react";
 
+// Parametru datu tipu definēšana
 interface NavbarProps {
   children: React.ReactNode
   currentPage: string

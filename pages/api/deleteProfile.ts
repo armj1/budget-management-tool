@@ -28,6 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
       }
 
+      // Ievadītās un lietotāja paroles salīdzināšana pirms izdzēšanas apstiprināšanas
       const passwordMatches = await bcrypt.compare(password, user.password);
       if (passwordMatches) {
         const deleteUser = await prisma.user.delete({

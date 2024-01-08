@@ -32,6 +32,8 @@ const MyProfile = (data: any) => {
   const CloseDeleteForm = () => {
     setToDelete(false);
   };
+
+  // Veidlapas ievaddatu noklusējuma vērtības iestatīšana
   const [formData, setFormData] = useState({
     firstName: data.firstName || "",
     lastName: data.lastName || "",
@@ -40,6 +42,7 @@ const MyProfile = (data: any) => {
     confirmPassword: "",
   });
 
+  // Ievaddatu nodošana API izsaukumam lietotāja datu atjaunināšanai
   const updateSubmit = async () => {
     try {
       const response = await fetch("/api/updateProfile", {
@@ -52,6 +55,8 @@ const MyProfile = (data: any) => {
       if (response.ok) {
         router.reload();
       }
+
+      // Funkcijas kļūdu atrašanai un paziņojumiem
       if (formData.firstName.trim() === "") {
         setShowFirstNameError(true);
       } else {
@@ -166,6 +171,7 @@ const MyProfile = (data: any) => {
   );
 };
 
+// Funkcija, kas ļauj iegūt lietotāja datus un tad ar tiem ielādēt atvērto skatu
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
 

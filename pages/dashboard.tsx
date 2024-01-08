@@ -5,8 +5,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import DashboardView from "@/pages/views/dashboard-view";
 import AddInitialData from "./dashboard/add-initial-data";
 
-const prisma = new PrismaClient();
-
+// Skata izvēle - sākumlapa vai pirmās atskaites izveides skats
 const Dashboard = (data: any) => {
   if (data.newUser == 0) {
     return <DashboardView {...data} />;
@@ -15,8 +14,9 @@ const Dashboard = (data: any) => {
   }
 };
 
+// Lietotāju un atskaišu datu vaicājumi sākumlapai / pirmās atskaites izveides skatam
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const prisma = new PrismaClient();
+  const prisma = new PrismaClient();
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -29,14 +29,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const userData = await prisma.user.findUnique({
     where: { id: session?.user.id },
   });
-  
+
   return {
     props: {
       firstName: userData?.firstName,
-      lastName: userData?.lastName,
-      email: userData?.email,
       newUser: userData?.newUser,
-      financialReports: filteredFinancialRecords
+      financialReports: filteredFinancialRecords,
     },
   };
 }

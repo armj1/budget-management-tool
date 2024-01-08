@@ -18,6 +18,7 @@ interface EditBudgetReportProps {
 }
 
 const EditBudgetReport = (props: EditBudgetReportProps) => {
+  // Veidlapas ievaddatu noklusējuma vērtības iestatīšana
   const [formData, setFormData] = useState({
     id: "",
     title: "",
@@ -37,6 +38,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
     foodSpending: "",
     otherSpending: "",
   });
+  // Kļūdu paziņojumu stāvokļu definēšana
   const [showTitleError, setShowTitleError] = useState(false);
   const [showTotalIncomeEmptyError, setShowTotalIncomeEmptyError] = useState(false);
   const [showTotalIncomeDecimalError, setShowTotalIncomeDecimalError] = useState(false);
@@ -69,13 +71,17 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
   const [showPetDecimalError, setShowPetDecimalError] = useState(false);
   const [showOtherEmptyError, setShowOtherEmptyError] = useState(false);
   const [showOtherDecimalError, setShowOtherDecimalError] = useState(false);
+
+  // Ievaddatu apstrāde izmaiņu gadījumā
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Ievaddati noklusēti ir string datu tipa, tādēļ tie tiek pārveidoti par skaitlisku vērtību
     const value = e.target.type === "number" ? parseFloat(e.target.value) : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
   };
 
   const [selectedReport, setSelectedReport] = useState<FinancialRecord>();
 
+  // Izvēlētās atskaites dati aizpilda atbilstošus ievadlaukus veidlapā
   const handleReportSelect = (report: FinancialRecord) => {
     setSelectedReport(report);
     setFormData({
@@ -99,6 +105,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
     });
   };
 
+  // Ievaddati tiek pārveidoti par skaitlisku vērtību, ko var iesniegt datu bāzē
   const convertFormData = (formData: any) => {
     return {
       id: formData.id,
@@ -121,6 +128,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
     };
   };
 
+  // Ievaddatu nodošana API izsaukumam atskaites datu atjaunināšanai
   const handleUpdate = async () => {
     const numericFormData = convertFormData(formData);
 
@@ -139,6 +147,7 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
         router.reload();
       }
 
+      // Funkcijas ievaddatu kļūdu atrašanai un kļūdu paziņojumiem
       if (formData.title.trim() === "") {
         setShowTitleError(true);
       } else {
@@ -582,6 +591,9 @@ const EditBudgetReport = (props: EditBudgetReportProps) => {
 
 export default EditBudgetReport;
 
+// Funkcija, kas ļauj iegūt atskaišu datus un tad ar tiem ielādēt atvērto skatu,
+// kas ļauj izvairīties no tā, ka lietotājam bez atskaitēm uz mirkli būs redzams 
+// ne "lietotājs bez atskaitēm" skats 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const prisma = new PrismaClient();
 

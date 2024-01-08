@@ -2,11 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Savienojuma izveide ar datu bāzi
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
+// Datu bāzes tabulu modeļi
 model user {
   id              String            @id @unique @default(uuid())
   firstName       String

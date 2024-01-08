@@ -2,8 +2,6 @@ import BudgetReportCard from "@/components/budgetNewReportCard";
 import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useState } from "react";
 
 const AddInitialData = (data: any) => {
   return (

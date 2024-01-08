@@ -1,11 +1,13 @@
 import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
+// Parametru datu tipu definēšana
 interface SpendingPieChartProps {
   spendingData: Record<string, number>;
 }
 
 const SpendingPieChart = (props: SpendingPieChartProps) => {
+  // Izdevumu datu vērtību piešķiršana sektoru diagrammas sektoriem
   const data = Object.entries(props.spendingData).map(([category, value]) => ({
     category,
     value,

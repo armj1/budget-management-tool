@@ -4,6 +4,7 @@ import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { useState } from "react";
 
+// Parametru datu tipu definēšana
 interface RegistrationProps {
   onClose: () => void;
 }
@@ -16,6 +17,7 @@ const RegistrationCard = (props: RegistrationProps) => {
   const [showPasswordLengthError, setShowPasswordLengthError] = useState(false);
   const [showPasswordMatchError, setShowPasswordMatchError] = useState(false);
 
+  // Veidlapas ievadlauku noklusējuma vērtības
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -24,10 +26,12 @@ const RegistrationCard = (props: RegistrationProps) => {
     confirmPassword: "",
   });
 
+  // Veidlapas ievaddatu apstrāde izmaiņu gadījumā
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Ievaddatu nodošana API izsaukumam lietotāja reģistrācijai
   const onRegistration = async () => {
     try {
       const response = await fetch("/api/register", {
@@ -44,6 +48,7 @@ const RegistrationCard = (props: RegistrationProps) => {
         props.onClose();
       }
 
+      // Kļūdu atrašanas un paziņojumu uzrādīšanas funkcijas
       if (formData.firstName.trim() === "") {
         setShowFirstNameError(true);
       } else {

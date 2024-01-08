@@ -10,7 +10,7 @@ import { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import Head from "next/head";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 
 interface CompareDataProps{
@@ -22,8 +22,6 @@ const CompareData = (props: CompareDataProps) => {
   const [selectedReport1, setSelectedReport1] = useState<FinancialRecord>();
   const [selectedReport2, setSelectedReport2] = useState<FinancialRecord>();
 
-
-
   const handleReportSelect1 = (report: FinancialRecord) => {
     setSelectedReport1(report);
   };
@@ -32,6 +30,7 @@ const CompareData = (props: CompareDataProps) => {
     setSelectedReport2(report);
   };
 
+  // Ikonas izvēle balstoties uz starpību
   const getIcon = (value: number) => {
     if (value > 0) {
       return <TrendingUp className="ml-3" />;
@@ -213,6 +212,9 @@ const CompareData = (props: CompareDataProps) => {
 
 export default CompareData;
 
+// Funkcija, kas ļauj iegūt atskaišu datus un tad ar tiem ielādēt atvērto skatu,
+// kas ļauj izvairīties no tā, ka lietotājam bez atskaitēm uz mirkli būs redzams 
+// ne "lietotājs bez atskaitēm" skats 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const prisma = new PrismaClient();
 

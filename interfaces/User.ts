@@ -1,5 +1,6 @@
 import FinancialRecord from "./FinancialRecord";
 
+// Datu tipu definēšana lietotāja datiem (ne datu bāzē)
 interface User {
   id: string;
   firstName: string;
@@ -7,7 +8,7 @@ interface User {
   email: string;
   password: string;
   newUser: boolean;
-  financialRecord: FinancialRecord[];
+  financialRecord: FinancialRecord[]; // Atsauce uz budžeta atskaišu datu shēmu
 }
 
 export default User;

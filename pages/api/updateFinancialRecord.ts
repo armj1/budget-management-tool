@@ -4,6 +4,7 @@ import { object, z } from "zod";
 
 const prisma = new PrismaClient();
 
+// Shēma atskaišu datu validācijai
 const financialRecordSchema = z
   .object({
     id: z.string(),
@@ -110,6 +111,7 @@ const isTwoDecimalPlaces = (value: number): boolean => {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "PUT") {
+    // Ievaddatu salīdzināšana ar datu shēmu
     const {
       id,
       title,

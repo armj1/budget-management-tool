@@ -52,7 +52,7 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
 
   const numberOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-  const makeCalculations = () => {
+const makeCalculations = () => {
     const preciseNeapliekamaisMinimumsValue = preciseNeapliekamaisMinimums || 0;
     const additionalTaxCutsValue = additionalTaxCuts || 0;
     let untaxedMinimum = 0;
@@ -61,6 +61,7 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
     const income = selectedReport?.totalIncome ?? 0;
     const vsaoi = Math.round(income * 0.105 * 100) / 100;
 
+    // Neapliekamā minimuma vērtības noteikšana
     if (isNeapliekamaisMinimumsChecked) {
       untaxedMinimum = Math.round(preciseNeapliekamaisMinimumsValue * 100) / 100;
     } else if (isAlgasGramatinaChecked === false || income > 1799) {
@@ -71,12 +72,14 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
       untaxedMinimum = Math.round(untaxedMinimum * 100) / 100;
     }
 
+    // Atvieglojuma par apgādībā esošām personām noteikšana
     if (isAlgasGramatinaChecked === false) {
       taxCuts = 0;
     } else {
       taxCuts = 250 * apgadajamoSkaits;
     }
 
+    // Iedzīvotāju ienākuma nodokļa aprēķins
     if (income * 12 <= 20004) {
       incomeTax = Math.max((income - vsaoi - untaxedMinimum - taxCuts - additionalTaxCutsValue) * 0.2, 0);
       incomeTax = Math.round(incomeTax * 100) / 100;
@@ -86,6 +89,7 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
       incomeTax = Math.round((income20perc + income23perc) * 100) / 100;
     }
 
+    // Neto ienākumu aprēķins
     const netIncome = Math.round((income - vsaoi - incomeTax) * 100) / 100;
 
     return {
@@ -108,6 +112,7 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
     }
   }, [selectedReport, areNetIncomesDifferent]);
 
+  // API izsaukums funkcijai priekš neto ienākumu atjaunināšanas atskaitē
   const handleUpdate = async () => {
     try {
       const response = await fetch("/api/updateNetIncome", {
@@ -225,6 +230,9 @@ const TaxCalculator = (props: TaxCalculatorProps) => {
 
 export default TaxCalculator;
 
+// Funkcija, kas ļauj iegūt atskaišu datus un tad ar tiem ielādēt atvērto skatu,
+// kas ļauj izvairīties no tā, ka lietotājam bez atskaitēm uz mirkli būs redzams 
+// ne "lietotājs bez atskaitēm" skats 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const prisma = new PrismaClient();
 

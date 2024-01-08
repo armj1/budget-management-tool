@@ -5,6 +5,7 @@ import { z } from "zod";
 
 const prisma = new PrismaClient();
 
+// Shēma reģistrācijas datu validācijai
 const userRegistrationSchema = z
   .object({
     firstName: z.string().min(1),
@@ -23,13 +24,16 @@ const userRegistrationSchema = z
     }
   );
 
+// Lietotāja reģistrācijas funkcija
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
+    // Tiek veikta ievadīto datu salīdzināšana ar shēmu
     const { firstName, lastName, email, password } = userRegistrationSchema.parse(req.body);
 
     try {
+      // Paroles šifrēšana un lietotāja izveides vaicājums
       const hashedPassword = await bcrypt.hash(password, 10);
-
+      
       const createUser = await prisma.user.create({
         data: {
           firstName,
@@ -41,6 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json({ user: createUser });
     } catch (error:any) {
+      // Tiek izmantots, lai varētu izvadīt paziņojumu par jau reģistrētu e-pastu
       if (error.code === "P2002" && error.meta?.target === "user_email_key") {
         res.status(400).json({ message: "Email is already in use." });
       } else {

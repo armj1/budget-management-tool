@@ -2,6 +2,7 @@ import FinancialRecord from "@/interfaces/FinancialRecord";
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
+// Parametru datu tipu definēšana
 interface DropdownReportsListProps {
   financialReports: FinancialRecord[];
   onSelectReport: (report: FinancialRecord) => void;

@@ -2,7 +2,6 @@ import DropdownReportsList from "@/components/dropdown-reports-list";
 import NavbarLayout from "@/components/navbar-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import FinancialRecord from "@/interfaces/FinancialRecord";
 import { PrismaClient } from "@prisma/client";
 import { Dot } from "lucide-react";
@@ -10,10 +9,10 @@ import { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import Head from "next/head";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 
-
+// Parametru datu tipa definēšana
 interface BudgetRecommendationsProps{
   financialReports: FinancialRecord[]
 }
@@ -41,6 +40,7 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
     (selectedReport?.shoppingSpending ?? 0) +
     (selectedReport?.transportSpending ?? 0);
 
+    // Budžeta atlikuma aprēķināšana - iestatīts tā, lai vērtība nevarētu būt mazāka par 0
   const leftoverMoney = Math.max(parseFloat(((selectedReport?.taxedIncome ?? 0) - totalSpending).toFixed(2)), 0);
 
   const recommendationCalculations = () => {
@@ -62,48 +62,54 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
     let openLeisure = false;
     const netIncome = selectedReport?.taxedIncome ?? 0;
 
+    // Mājokļa izdevumu rekomendācijas aprēķins 
     if ((selectedReport?.housingSpending ?? 0) > netIncome * 0.3) {
       recommendedHousing = Math.round(netIncome * 0.3 * 100) / 100;
       openHousingRecomm = true;
     }
 
+    // Ieguldījumu rekomendācijas aprēķins
     if ((selectedReport?.investmentSpending ?? 0) < netIncome * 0.15) {
       recommendedSavings = Math.round(netIncome * 0.15 * 100) / 100;
       openSavingsRecomm = true;
     }
 
+    // Budžeta atlikuma rekomendācijas izvēle
     if (leftoverMoney == 0) {
       openLeftoverZero = true;
     } else if (leftoverMoney > 0) {
       openLeftover = true;
     }
 
+    // Pārtikas izdevumu rekomendācijas aprēķins
     if ((selectedReport?.foodSpending ?? 0) > netIncome * 0.15) {
       recommendedFood = Math.round(netIncome * 0.15 * 100) / 100;
       openFood = true;
     }
 
+    // Apdrošināšanas izdevumu rekomendācijas aprēķins
     if ((selectedReport?.insuranceSpending ?? 0) > netIncome * 0.25) {
       recommendedInsurance = Math.round(netIncome * 0.25 * 100) / 100;
       openInsurance = true;
     }
 
+    // Transporta izdevumu rekomendācijas aprēķins
     if ((selectedReport?.transportSpending ?? 0) > netIncome * 0.15) {
       recommendedTransport = Math.round(netIncome * 0.15 * 100) / 100;
       openTransport = true;
     }
 
+    // Veselības un skaistumkopšanas izdevumu rekomendācija
     if ((selectedReport?.healthSpending ?? 0) > netIncome * 0.1) {
       recommendedHealth = Math.round(netIncome * 0.1 * 100) / 100;
       openHealth = true;
     }
 
+    // Izklaides izdevumu rekomendācija
     if ((selectedReport?.leisureSpending ?? 0) > netIncome * 0.1) {
       recommendedLeisure = Math.round(netIncome * 0.1 * 100) / 100;
       openLeisure = true;
     }
-
-
 
     return {
       housing: recommendedHousing,
@@ -126,8 +132,6 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
   };
 
   const recommendations = recommendationCalculations();
-
-
 
   const hasReports = props.financialReports.length > 0;
 
@@ -222,6 +226,9 @@ const BudgetRecommendations = (props: BudgetRecommendationsProps) => {
 
 export default BudgetRecommendations;
 
+// Funkcija, kas ļauj iegūt atskaišu datus un tad ar tiem ielādēt atvērto skatu,
+// kas ļauj izvairīties no tā, ka lietotājam bez atskaitēm uz mirkli būs redzams 
+// ne "lietotājs bez atskaitēm" skats 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const prisma = new PrismaClient();
 
@@ -230,7 +237,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     where: { userId: session?.user.id },
   });
 
-  console.log(financialRecords);
   const filteredFinancialRecords = financialRecords.map(({ date, ...rest }) => rest);
 
   return {

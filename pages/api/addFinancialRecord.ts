@@ -6,6 +6,7 @@ import { z } from "zod";
 
 const prisma = new PrismaClient();
 
+// Shēma atskaišu datu validācijai
 const financialRecordSchema = z
   .object({
     title: z.string().min(1),
@@ -113,6 +114,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const session = await getServerSession(req, res, authOptions);
 
   if (req.method === "POST") {
+    // Ievaddatu salīdzināšana ar datu shēmu
     const {
       title,
       totalIncome,
@@ -156,6 +158,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       res.status(200).json({ financialRecord: createFinancialRecord });
+      // newUser tiek mainīts uz false, lai turpmāk, piesakoties sistēmā, lietotājs nonāk sākumlapas skatā,
+      // nevis pirmās atskaites izveides skatā
       const updateUserStatus = await prisma.user.update({
         where: { id: session?.user.id },
         data: { newUser: false },

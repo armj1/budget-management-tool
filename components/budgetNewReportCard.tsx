@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 const BudgetNewReportCard = () => {
   const router = useRouter();
 
+  // Veidlapas ievadlauku noklusējuma vērtības
   const [formData, setFormData] = useState({
     title: "",
     totalIncome: "",
@@ -27,6 +28,7 @@ const BudgetNewReportCard = () => {
     otherSpending: "",
   });
 
+  // Kļūdu paziņojumu stāvokļi - ja ir kļūda, tie uzrodas (true), izlabojot tie nozūd (false)
   const [showTitleError, setShowTitleError] = useState(false);
   const [showTotalIncomeEmptyError, setShowTotalIncomeEmptyError] = useState(false);
   const [showTotalIncomeDecimalError, setShowTotalIncomeDecimalError] = useState(false);
@@ -60,11 +62,14 @@ const BudgetNewReportCard = () => {
   const [showOtherEmptyError, setShowOtherEmptyError] = useState(false);
   const [showOtherDecimalError, setShowOtherDecimalError] = useState(false);
 
+  // Veidlapas ievaddatu apstrāde izmaiņu gadījumā
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Tā kā formData ievades lauki pieņem string vērtības, tās tiek pārveidotas par skaitliskām float vertībām
     const value = e.target.type === "number" ? parseFloat(e.target.value) : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
   };
 
+  // Ievaddatu nodošana API izsaukumam atskaites izveidošanai
   const onSubmit = async () => {
     try {
       const response = await fetch("/api/addFinancialRecord", {
@@ -81,6 +86,7 @@ const BudgetNewReportCard = () => {
         router.reload();
       }
 
+      // Kļūdu atrašanas un paziņojumu uzrādīšanas funkcijas
       if (formData.title.trim() === "") {
         setShowTitleError(true);
       } else {

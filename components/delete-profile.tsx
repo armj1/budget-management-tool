@@ -4,8 +4,8 @@ import { Input } from "./ui/input";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { X } from "lucide-react";
-import { PrismaClient } from "@prisma/client";
 
+// Parametru datu tipu definēšana
 interface DeleteFormProps {
   onClose: () => void;
   password: string;
@@ -14,12 +14,14 @@ interface DeleteFormProps {
 const DeleteProfileForm = (props: DeleteFormProps) => {
   const router = useRouter();
 
+  // Paroles ievaddlauka noklusējuma vērtība
   const [formData, setFormData] = useState({
     password: "",
   });
 
   const [showPasswordError, setShowPasswordError] = useState(false);
 
+  // Ievaddatu nodošana API izsaukumam lietotāja izdzēšanai
   const handleDelete = async () => {
     try {
       const response = await fetch("/api/deleteProfile", {

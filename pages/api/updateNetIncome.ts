@@ -4,6 +4,7 @@ import { z } from "zod";
 
 const prisma = new PrismaClient();
 
+// Shēma neto ienākumu datu validācijai
 const financialRecordSchema = z.object({
   id: z.string(),
   taxedIncome: z.number().positive(),
@@ -11,6 +12,7 @@ const financialRecordSchema = z.object({
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "PUT") {
+    // Ievaddatu salīdzināšana ar datu shēmu
     const {
       id,
       taxedIncome
